@@ -1,10 +1,10 @@
-for i = 1, 100, 1 do
-    local leveltint = { r = 0.008 * i, g = 0.004 * i, b = 0.008 * i, a = 0.008 * i }
+for i = 1, 25, 1 do
+    local leveltint = { r = 0.1 + 0.032 * i, g = 0.1 + 0.016 * i, b = 0.1 + 0.032 * i, 1 }
 
     data:extend({
         {
             type = "item",
-            name = "assembling-machine-level-" .. i,
+            name = "assembling-machine-1-level-" .. i,
             icons = {
                 {
                     icon = "__base__/graphics/icons/assembling-machine-1.png",
