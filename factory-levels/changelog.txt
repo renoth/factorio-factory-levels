@@ -1,3 +1,7 @@
+Version: 0.0.2
+  Features:
+    - Assembler 2 and 3 also with levels
+-------------
 Version: 0.0.1
   Features:
     - First version
