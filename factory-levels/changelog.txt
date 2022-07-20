@@ -1,6 +1,7 @@
 Version: 0.0.3
   Features:
     - Assembler 2 and 3 also with levels
+    - Stone and Steel Furnace with levels
 -------------
 Version: 0.0.1
   Features:
