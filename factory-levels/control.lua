@@ -1,9 +1,11 @@
 script.on_init(function()
-
+    global.stored_products_finished_assemblers = {}
+    global.stored_products_finished_furnaces = {}
 end)
 
 script.on_load(function()
-
+    log(serpent.block(global.stored_products_finished_assemblers))
+    log(serpent.block(global.stored_products_finished_furnaces))
 end)
 
 function string_starts_with(str, start)
@@ -117,3 +119,35 @@ script.on_nth_tick(300, function(event)
         replace_smelters(smelters, surface)
     end
 end)
+
+script.on_event(
+        defines.events.on_player_mined_entity,
+        function(event)
+            if (event.entity ~= nil and event.entity.products_finished ~= nil and event.entity.products_finished > 0) then
+                if event.entity.type == "furnace" then
+                    table.insert(global.stored_products_finished_furnaces, event.entity.products_finished)
+                end
+
+                if event.entity.type == "assembling-machine" then
+                    table.insert(global.stored_products_finished_assemblers, event.entity.products_finished)
+                end
+            end
+        end,
+        { { filter = "type", type = "assembling-machine" },
+          { filter = "type", type = "furnace" } })
+
+script.on_event(
+        defines.events.on_built_entity,
+        function(event)
+            if event.created_entity ~= nil then
+                if (event.created_entity.type == "assembling-machine" and next(global.stored_products_finished_assemblers) ~= nil) then
+                    event.created_entity.products_finished = table.remove(global.stored_products_finished_assemblers)
+                end
+
+                if (event.created_entity.type == "furnace" and next(global.stored_products_finished_furnaces) ~= nil) then
+                    event.created_entity.products_finished = table.remove(global.stored_products_finished_furnaces)
+                end
+            end
+        end,
+        { { filter = "type", type = "assembling-machine" },
+          { filter = "type", type = "furnace" } })
