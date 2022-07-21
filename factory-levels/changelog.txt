@@ -1,13 +1,13 @@
+Version: 0.1.1
+  - Improvements in handling produced count
+-------------------------------------------------------
 Version: 0.1.0
-  Features:
-    - Store Manufactured item count when dectonstructing an entity
-    - Apply last manufactured item count on constructing an entity of the same type
+  - Store Manufactured item count when dectonstructing an entity
+  - Apply last manufactured item count on constructing an entity of the same type
 -------------------------------------------------------
 Version: 0.0.3
-  Features:
-    - Assembler 2 and 3 also with levels
-    - Stone and Steel Furnace with levels
+  - Assembler 2 and 3 also with levels
+  - Stone and Steel Furnace with levels
 -------------------------------------------------------
 Version: 0.0.1
-  Features:
-    - First version
+  - First version
