@@ -1,10 +1,9 @@
 for i = 1, 25, 1 do
-    local leveltint = { r = 0.1 + 0.01 * i, g = 0.1 + 0.01 * i, b = 0.1 + 0.032 * i, 1 }
+    local leveltint = { r = 1 - 0.02 * i, g = 1 - 0.02 * i, b = 1, 1 }
 
     local assemblyLeveled = util.table.deepcopy(data.raw["assembling-machine"]["assembling-machine-1"])
 
     assemblyLeveled.name = "assembling-machine-1-level-" .. i
-    assemblyLeveled.icons = { { icon = "__base__/graphics/icons/assembling-machine-1.png", tint = { r = 0.01 * i, g = 0.01 * i, b = 0.032 * i, 1 } } }
     assemblyLeveled.minable.result = "assembling-machine-1"
     assemblyLeveled.animation.layers[1].hr_version.tint = leveltint
     assemblyLeveled.animation.layers[1].tint = leveltint
@@ -18,12 +17,11 @@ for i = 1, 25, 1 do
 end
 
 for i = 1, 50, 1 do
-    local leveltint = { r = 0.1 + 0.010 * i, g = 0.1 + 0.010 * i, b = 1 - 0.016 * i, 1 }
+    local leveltint = { r = 1, g = 1, b = 1 - 0.016 * i, 1 }
 
     local assemblyLeveled = util.table.deepcopy(data.raw["assembling-machine"]["assembling-machine-2"])
 
     assemblyLeveled.name = "assembling-machine-2-level-" .. i
-    assemblyLeveled.icons = { { icon = "__base__/graphics/icons/assembling-machine-2.png", tint = { r = 0.1 + 0.010 * i, g = 0.1 + 0.010 * i, b = 0.1 + 0.016 * i, 1 } } }
     assemblyLeveled.minable.result = "assembling-machine-2"
     assemblyLeveled.animation.layers[1].hr_version.tint = leveltint
     assemblyLeveled.animation.layers[1].tint = leveltint
@@ -38,12 +36,11 @@ for i = 1, 50, 1 do
 end
 
 for i = 1, 100, 1 do
-    local leveltint = { r = 0.1 + 0.008 * i, g = 0.1 + 0.002 * i, b = 0.1 + 0.004 * i, 1 }
+    local leveltint = { r = 1, g = 1 - 0.008 * i, b = 1 - 0.008 * i, 1 }
 
     local assemblyLeveled = util.table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"])
 
     assemblyLeveled.name = "assembling-machine-3-level-" .. i
-    assemblyLeveled.icons = { { icon = "__base__/graphics/icons/assembling-machine-3.png", tint = { r = 0.1 + 0.008 * i, g = 0.1 + 0.002 * i, b = 0.1 + 0.004 * i, 1 } } }
     assemblyLeveled.minable.result = "assembling-machine-3"
     assemblyLeveled.animation.layers[1].hr_version.tint = leveltint
     assemblyLeveled.animation.layers[1].tint = leveltint
@@ -60,7 +57,7 @@ end
 -- Furnaces
 
 for i = 1, 25, 1 do
-    local leveltint = { r = 0.1 + 0.032 * i, g = 0.1 + 0.032 * i, b = 0.1 + 0.01 * i, 1 }
+    local leveltint = { r = 1 - 0.032 * i, g = 1 - 0.032 * i, b = 1, 1 }
 
     local furnaceLeveled = util.table.deepcopy(data.raw["furnace"]["stone-furnace"])
 
@@ -78,7 +75,7 @@ for i = 1, 25, 1 do
 end
 
 for i = 1, 100, 1 do
-    local leveltint = { r = 0.1 + 0.008 * i, g = 0.1 + 0.002 * i, b = 0.1 + 0.008 * i, 1 }
+    local leveltint = { r = 1, g = 1 - 0.008 * i, b = 1 - 0.008 * i, 1 }
 
     local furnaceLeveled = util.table.deepcopy(data.raw["furnace"]["steel-furnace"])
 
