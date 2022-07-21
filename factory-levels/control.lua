@@ -99,7 +99,7 @@ function replace_smelters(entities, surface)
             if (entity.products_finished > requireditems_assembler1[currentlevel] and currentlevel < 25) then
                 upgrade_factory(surface, "stone-furnace-level-" .. (currentlevel + 1), entity)
             elseif (currentlevel == 25 and entity.name == "stone-furnace-level-25") then
-                local created = upgrade_factory_(surface, "steel-furnace", entity)
+                local created = upgrade_factory(surface, "steel-furnace", entity)
                 created.products_finished = 0
             end
         elseif string_starts_with(entity.name, "steel-furnace-level-") then
@@ -126,10 +126,12 @@ script.on_event(
             if (event.entity ~= nil and event.entity.products_finished ~= nil and event.entity.products_finished > 0) then
                 if event.entity.type == "furnace" then
                     table.insert(global.stored_products_finished_furnaces, event.entity.products_finished)
+                    table.sort(global.stored_products_finished_furnaces)
                 end
 
                 if event.entity.type == "assembling-machine" then
                     table.insert(global.stored_products_finished_assemblers, event.entity.products_finished)
+                    table.sort(global.stored_products_finished_assemblers)
                 end
             end
         end,

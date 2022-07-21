@@ -1,3 +1,9 @@
+Version: 0.1.4
+  - fix typo
+-------------------------------------------------------
+Version: 0.1.3
+  - stored products are now sorted to return the highest value first
+-------------------------------------------------------
 Version: 0.1.2
   - More subtle coloring of leveled up entities
 -------------------------------------------------------
