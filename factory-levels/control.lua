@@ -4,8 +4,6 @@ script.on_init(function()
 end)
 
 script.on_load(function()
-    log(serpent.block(global.stored_products_finished_assemblers))
-    log(serpent.block(global.stored_products_finished_furnaces))
 end)
 
 function string_starts_with(str, start)

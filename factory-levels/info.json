@@ -1,7 +1,7 @@
 {
   "name": "factory-levels",
   "title": "Factory Levels",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "author": "sensenmann",
   "homepage": "https://github.com/renoth/factorio-factory-levels",
   "description": "Factories can level up by producing items",

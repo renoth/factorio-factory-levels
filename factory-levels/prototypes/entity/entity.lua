@@ -5,6 +5,7 @@ for i = 1, 25, 1 do
 
     assemblyLeveled.name = "assembling-machine-1-level-" .. i
     assemblyLeveled.minable.result = "assembling-machine-1"
+    assemblyLeveled.placeable_by = { item = "assembling-machine-1", count = 1 }
     assemblyLeveled.animation.layers[1].hr_version.tint = leveltint
     assemblyLeveled.animation.layers[1].tint = leveltint
     assemblyLeveled.animation.layers[2].hr_version.tint = leveltint
@@ -23,6 +24,7 @@ for i = 1, 50, 1 do
 
     assemblyLeveled.name = "assembling-machine-2-level-" .. i
     assemblyLeveled.minable.result = "assembling-machine-2"
+    assemblyLeveled.placeable_by = { item = "assembling-machine-2", count = 1 }
     assemblyLeveled.animation.layers[1].hr_version.tint = leveltint
     assemblyLeveled.animation.layers[1].tint = leveltint
     assemblyLeveled.animation.layers[2].hr_version.tint = leveltint
@@ -42,6 +44,7 @@ for i = 1, 100, 1 do
 
     assemblyLeveled.name = "assembling-machine-3-level-" .. i
     assemblyLeveled.minable.result = "assembling-machine-3"
+    assemblyLeveled.placeable_by = { item = "assembling-machine-3", count = 1 }
     assemblyLeveled.animation.layers[1].hr_version.tint = leveltint
     assemblyLeveled.animation.layers[1].tint = leveltint
     assemblyLeveled.animation.layers[2].hr_version.tint = leveltint
@@ -63,6 +66,7 @@ for i = 1, 25, 1 do
 
     furnaceLeveled.name = "stone-furnace-level-" .. i
     furnaceLeveled.minable.result = "stone-furnace"
+    assemblyLeveled.placeable_by = { item = "stone-furnace", count = 1 }
     furnaceLeveled.animation.layers[1].hr_version.tint = leveltint
     furnaceLeveled.animation.layers[1].tint = leveltint
     furnaceLeveled.animation.layers[2].hr_version.tint = leveltint
@@ -81,6 +85,7 @@ for i = 1, 100, 1 do
 
     furnaceLeveled.name = "steel-furnace-level-" .. i
     furnaceLeveled.minable.result = "steel-furnace"
+    assemblyLeveled.placeable_by = { item = "steel-furnace", count = 1 }
     furnaceLeveled.animation.layers[1].hr_version.tint = leveltint
     furnaceLeveled.animation.layers[1].tint = leveltint
     furnaceLeveled.animation.layers[2].hr_version.tint = leveltint
