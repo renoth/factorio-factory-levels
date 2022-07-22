@@ -66,7 +66,7 @@ for i = 1, 25, 1 do
 
     furnaceLeveled.name = "stone-furnace-level-" .. i
     furnaceLeveled.minable.result = "stone-furnace"
-    assemblyLeveled.placeable_by = { item = "stone-furnace", count = 1 }
+    furnaceLeveled.placeable_by = { item = "stone-furnace", count = 1 }
     furnaceLeveled.animation.layers[1].hr_version.tint = leveltint
     furnaceLeveled.animation.layers[1].tint = leveltint
     furnaceLeveled.animation.layers[2].hr_version.tint = leveltint
@@ -85,7 +85,7 @@ for i = 1, 100, 1 do
 
     furnaceLeveled.name = "steel-furnace-level-" .. i
     furnaceLeveled.minable.result = "steel-furnace"
-    assemblyLeveled.placeable_by = { item = "steel-furnace", count = 1 }
+    furnaceLeveled.placeable_by = { item = "steel-furnace", count = 1 }
     furnaceLeveled.animation.layers[1].hr_version.tint = leveltint
     furnaceLeveled.animation.layers[1].tint = leveltint
     furnaceLeveled.animation.layers[2].hr_version.tint = leveltint
