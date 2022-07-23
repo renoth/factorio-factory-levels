@@ -1,3 +1,9 @@
+Version: 0.2.0
+  - New Levelup mechanic: More productivity on levelup
+  - New Levelup mechanic: Additional modules slots at certain levels (20 for Assembler 1; 20 and 40 for Assembler 2 and 25, 50, 75 and 100 for Assembler 3)
+  - All levelup mechanics configurable separately via mod settings
+  - Leveling exponent configurable via mod setting (lower is faster)
+-------------------------------------------------------
 Version: 0.1.5
   - fix pipette and blueprint items for leveled entities
 -------------------------------------------------------

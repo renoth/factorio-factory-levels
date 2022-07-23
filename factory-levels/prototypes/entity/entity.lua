@@ -10,9 +10,27 @@ for i = 1, 25, 1 do
     assemblyLeveled.animation.layers[1].tint = leveltint
     assemblyLeveled.animation.layers[2].hr_version.tint = leveltint
     assemblyLeveled.animation.layers[2].tint = leveltint
-    assemblyLeveled.energy_usage = (75 + 2.5 * i) .. "kW"
-    assemblyLeveled.crafting_speed = 0.5 + i * 0.01
-    assemblyLeveled.energy_source.emissions_per_minute = 4 + 0.04 * i
+
+    if (settings.startup["factory-levels-enable-speed-bonus"].value) then
+        assemblyLeveled.crafting_speed = 0.5 + i * 0.01
+    end
+
+    if (settings.startup["factory-levels-enable-energy-usage"].value) then
+        assemblyLeveled.energy_usage = (75 + 2.5 * i) .. "kW"
+    end
+
+    if (settings.startup["factory-levels-enable-emissions"].value) then
+        assemblyLeveled.energy_source.emissions_per_minute = 4 + 0.04 * i
+    end
+
+    if (settings.startup["factory-levels-enable-productivity-bonus"].value) then
+        assemblyLeveled.base_productivity = 0.0025 * i
+    end
+
+    if (settings.startup["factory-levels-enable-module-bonus"].value and i >= 20) then
+        assemblyLeveled.module_specification = { module_slots = 1 }
+        assemblyLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
+    end
 
     data:extend({ assemblyLeveled })
 end
@@ -29,10 +47,30 @@ for i = 1, 50, 1 do
     assemblyLeveled.animation.layers[1].tint = leveltint
     assemblyLeveled.animation.layers[2].hr_version.tint = leveltint
     assemblyLeveled.animation.layers[2].tint = leveltint
-    assemblyLeveled.energy_usage = (150 + 4.5 * i) .. "kW"
-    assemblyLeveled.crafting_speed = 0.75 + i * 0.01
-    assemblyLeveled.maxhealth = 350 + i
-    assemblyLeveled.energy_source.emissions_per_minute = 3 + 0.04 * i
+
+    if (settings.startup["factory-levels-enable-speed-bonus"].value) then
+        assemblyLeveled.crafting_speed = 0.75 + i * 0.01
+    end
+
+    if (settings.startup["factory-levels-enable-energy-usage"].value) then
+        assemblyLeveled.energy_usage = (150 + 4.5 * i) .. "kW"
+    end
+
+    if (settings.startup["factory-levels-enable-emissions"].value) then
+        assemblyLeveled.energy_source.emissions_per_minute = 3 + 0.04 * i
+    end
+
+    if (settings.startup["factory-levels-enable-productivity-bonus"].value) then
+        assemblyLeveled.base_productivity = 0.0025 * i
+    end
+
+    if (settings.startup["factory-levels-enable-module-bonus"].value and i >= 40) then
+        assemblyLeveled.module_specification = { module_slots = 4 }
+        assemblyLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
+    elseif (settings.startup["factory-levels-enable-module-bonus"].value and i >= 20) then
+        assemblyLeveled.module_specification = { module_slots = 3 }
+        assemblyLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
+    end
 
     data:extend({ assemblyLeveled })
 end
@@ -49,10 +87,36 @@ for i = 1, 100, 1 do
     assemblyLeveled.animation.layers[1].tint = leveltint
     assemblyLeveled.animation.layers[2].hr_version.tint = leveltint
     assemblyLeveled.animation.layers[2].tint = leveltint
-    assemblyLeveled.energy_usage = (375 + 7.5 * i) .. "kW"
-    assemblyLeveled.crafting_speed = 1.25 + i * 0.0175
-    assemblyLeveled.maxhealth = 400 + i * 4
-    assemblyLeveled.energy_source.emissions_per_minute = 2 + 0.04 * i
+
+    if (settings.startup["factory-levels-enable-speed-bonus"].value) then
+        assemblyLeveled.crafting_speed = 1.25 + i * 0.0175
+    end
+
+    if (settings.startup["factory-levels-enable-energy-usage"].value) then
+        assemblyLeveled.energy_usage = (375 + 7.5 * i) .. "kW"
+    end
+
+    if (settings.startup["factory-levels-enable-emissions"].value) then
+        assemblyLeveled.energy_source.emissions_per_minute = 2 + 0.04 * i
+    end
+
+    if (settings.startup["factory-levels-enable-productivity-bonus"].value) then
+        assemblyLeveled.base_productivity = 0.0025 * i
+    end
+
+    if (settings.startup["factory-levels-enable-module-bonus"].value and i >= 100) then
+        assemblyLeveled.module_specification = { module_slots = 8 }
+        assemblyLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
+    elseif (settings.startup["factory-levels-enable-module-bonus"].value and i >= 75) then
+        assemblyLeveled.module_specification = { module_slots = 7 }
+        assemblyLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
+    elseif (settings.startup["factory-levels-enable-module-bonus"].value and i >= 50) then
+        assemblyLeveled.module_specification = { module_slots = 6 }
+        assemblyLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
+    elseif (settings.startup["factory-levels-enable-module-bonus"].value and i >= 25) then
+        assemblyLeveled.module_specification = { module_slots = 5 }
+        assemblyLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
+    end
 
     data:extend({ assemblyLeveled })
 end
@@ -71,9 +135,22 @@ for i = 1, 25, 1 do
     furnaceLeveled.animation.layers[1].tint = leveltint
     furnaceLeveled.animation.layers[2].hr_version.tint = leveltint
     furnaceLeveled.animation.layers[2].tint = leveltint
-    furnaceLeveled.energy_usage = (90 - 0.25 * i) .. "kW"
-    furnaceLeveled.crafting_speed = 1 + i * 0.04
-    furnaceLeveled.energy_source.emissions_per_minute = 2 + 0.04 * i
+
+    if (settings.startup["factory-levels-enable-speed-bonus"].value) then
+        furnaceLeveled.crafting_speed = 1 + i * 0.04
+    end
+
+    if (settings.startup["factory-levels-enable-energy-usage"].value) then
+        furnaceLeveled.energy_usage = (90 + 1 * i) .. "kW"
+    end
+
+    if (settings.startup["factory-levels-enable-emissions"].value) then
+        furnaceLeveled.energy_source.emissions_per_minute = 2 + 0.04 * i
+    end
+
+    if (settings.startup["factory-levels-enable-productivity-bonus"].value) then
+        furnaceLeveled.base_productivity = 0.002 * i
+    end
 
     data:extend({ furnaceLeveled })
 end
@@ -90,9 +167,36 @@ for i = 1, 100, 1 do
     furnaceLeveled.animation.layers[1].tint = leveltint
     furnaceLeveled.animation.layers[2].hr_version.tint = leveltint
     furnaceLeveled.animation.layers[2].tint = leveltint
-    furnaceLeveled.energy_usage = (90 - 0.3 * i) .. "kW"
-    furnaceLeveled.crafting_speed = 2 + i * 0.06
-    furnaceLeveled.energy_source.emissions_per_minute = 4 + 0.12 * i
+
+    if (settings.startup["factory-levels-enable-speed-bonus"].value) then
+        furnaceLeveled.crafting_speed = 2 + i * 0.04
+    end
+
+    if (settings.startup["factory-levels-enable-energy-usage"].value) then
+        furnaceLeveled.energy_usage = (90 + 2 * i) .. "kW"
+    end
+
+    if (settings.startup["factory-levels-enable-emissions"].value) then
+        furnaceLeveled.energy_source.emissions_per_minute = 4 + 0.12 * i
+    end
+
+    if (settings.startup["factory-levels-enable-productivity-bonus"].value) then
+        furnaceLeveled.base_productivity = 0.002 * i
+    end
+
+    if (settings.startup["factory-levels-enable-module-bonus"].value and i >= 100) then
+        furnaceLeveled.module_specification = { module_slots = 4 }
+        furnaceLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
+    elseif (settings.startup["factory-levels-enable-module-bonus"].value and i >= 75) then
+        furnaceLeveled.module_specification = { module_slots = 3 }
+        furnaceLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
+    elseif (settings.startup["factory-levels-enable-module-bonus"].value and i >= 50) then
+        furnaceLeveled.module_specification = { module_slots = 2 }
+        furnaceLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
+    elseif (settings.startup["factory-levels-enable-module-bonus"].value and i >= 25) then
+        furnaceLeveled.module_specification = { module_slots = 1 }
+        furnaceLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
+    end
 
     data:extend({ furnaceLeveled })
 end

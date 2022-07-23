@@ -19,16 +19,18 @@ requireditems_assembler2 = {
 requireditems_assembler3 = {
 }
 
+exponent = settings.startup["factory-levels-exponent"].value
+
 for i = 1, 25, 1 do
-    table.insert(requireditems_assembler1, math.floor(10 + math.pow(i, 2.86136))) -- level 25 is 10k items
+    table.insert(requireditems_assembler1, math.floor(10 + math.pow(i, exponent))) -- level 25 is 10k items
 end
 
 for i = 1, 50, 1 do
-    table.insert(requireditems_assembler2, math.floor(10 + math.pow(i, 3))) -- level 50 is 125k items
+    table.insert(requireditems_assembler2, math.floor(10 + math.pow(i, exponent))) -- level 50 is 125k items
 end
 
 for i = 1, 100, 1 do
-    table.insert(requireditems_assembler3, math.floor(10 + math.pow(i, 3))) -- level 100 is 1M items
+    table.insert(requireditems_assembler3, math.floor(10 + math.pow(i, exponent))) -- level 100 is 1M items
 end
 
 function upgrade_factory(surface, targetname, sourceentity)
