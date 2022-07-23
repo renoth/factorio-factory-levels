@@ -22,15 +22,27 @@ requireditems_assembler3 = {
 exponent = settings.startup["factory-levels-exponent"].value
 
 for i = 1, 25, 1 do
-    table.insert(requireditems_assembler1, math.floor(10 + math.pow(i, exponent))) -- level 25 is 10k items
+    table.insert(requireditems_assembler1, math.floor(1 + math.pow(i, exponent))) -- level 25 is 15k items
 end
 
 for i = 1, 50, 1 do
-    table.insert(requireditems_assembler2, math.floor(10 + math.pow(i, exponent))) -- level 50 is 125k items
+    table.insert(requireditems_assembler2, math.floor(1 + math.pow(i, exponent))) -- level 50 is 125k items
 end
 
 for i = 1, 100, 1 do
-    table.insert(requireditems_assembler3, math.floor(10 + math.pow(i, exponent))) -- level 100 is 1M items
+    table.insert(requireditems_assembler3, math.floor(1 + math.pow(i, exponent))) -- level 100 is 1M items
+end
+
+function determine_level(finished_products_count, levels)
+    local should_have_level = 1
+
+    for level, min_count_required_for_level in pairs(levels) do
+        if finished_products_count >= min_count_required_for_level then
+            should_have_level = level
+        end
+    end
+
+    return should_have_level
 end
 
 function upgrade_factory(surface, targetname, sourceentity)
@@ -55,32 +67,34 @@ end
 
 function replace_assembler(entities, surface)
     for _, entity in pairs(entities) do
+        local should_have_level = determine_level(entity.products_finished, requireditems_assembler1)
         if (entity.name == "assembling-machine-1" and entity.products_finished > 0) then
-            upgrade_factory(surface, "assembling-machine-1-level-1", entity)
+            upgrade_factory(surface, "assembling-machine-1-level-" .. should_have_level, entity)
         elseif (entity.name == "assembling-machine-2" and entity.products_finished > 0) then
-            upgrade_factory(surface, "assembling-machine-2-level-1", entity)
+            upgrade_factory(surface, "assembling-machine-2-level-" .. should_have_level, entity)
         elseif (entity.name == "assembling-machine-3" and entity.products_finished > 0) then
-            upgrade_factory(surface, "assembling-machine-3-level-1", entity)
-        elseif string_starts_with(entity.name, "assembling-machine-1-level-") then
-            local currentlevel = tonumber(string.match(entity.name, "%d+$"))
-            if (entity.products_finished > requireditems_assembler1[currentlevel] and currentlevel < 25) then
-                upgrade_factory(surface, "assembling-machine-1-level-" .. (currentlevel + 1), entity)
-            elseif (currentlevel == 25 and entity.name == "assembling-machine-1-level-25") then
-                local created = upgrade_factory(surface, "assembling-machine-2", entity)
-                created.products_finished = 0
-            end
-        elseif string_starts_with(entity.name, "assembling-machine-2-level-") then
-            local currentlevel = tonumber(string.match(entity.name, "%d+$"))
-            if (entity.products_finished > requireditems_assembler2[currentlevel] and currentlevel < 50) then
-                upgrade_factory(surface, "assembling-machine-2-level-" .. (currentlevel + 1), entity)
-            elseif (currentlevel == 50 and entity.name == "assembling-machine-2-level-50") then
-                local created = upgrade_factory(surface, "assembling-machine-3", entity)
-                created.products_finished = 0
-            end
-        elseif string_starts_with(entity.name, "assembling-machine-3-level-") then
-            local currentlevel = tonumber(string.match(entity.name, "%d+$"))
-            if (entity.products_finished > requireditems_assembler3[currentlevel] and currentlevel < 100) then
-                upgrade_factory(surface, "assembling-machine-3-level-" .. (currentlevel + 1), entity)
+            upgrade_factory(surface, "assembling-machine-3-level-" .. should_have_level, entity)
+        else
+            local current_level = tonumber(string.match(entity.name, "%d+$"))
+
+            if string_starts_with(entity.name, "assembling-machine-1-level-") then
+                if (should_have_level > current_level and current_level < 25) then
+                    upgrade_factory(surface, "assembling-machine-1-level-" .. should_have_level, entity)
+                elseif (current_level == 25 and entity.name == "assembling-machine-1-level-25") then
+                    local created = upgrade_factory(surface, "assembling-machine-2", entity)
+                    created.products_finished = 0
+                end
+            elseif string_starts_with(entity.name, "assembling-machine-2-level-") then
+                if (should_have_level > current_level and current_level < 50) then
+                    upgrade_factory(surface, "assembling-machine-2-level-" .. (current_level + 1), entity)
+                elseif (current_level == 50 and entity.name == "assembling-machine-2-level-50") then
+                    local created = upgrade_factory(surface, "assembling-machine-3", entity)
+                    created.products_finished = 0
+                end
+            elseif string_starts_with(entity.name, "assembling-machine-3-level-") then
+                if (should_have_level > current_level and currentlevel < 100) then
+                    upgrade_factory(surface, "assembling-machine-3-level-" .. (currentlevel + 1), entity)
+                end
             end
         end
     end
