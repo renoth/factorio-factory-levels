@@ -156,9 +156,9 @@ script.on_event(
                     if created_entity_name == "assembling-machine-1" then
                         upgrade_factory(event.created_entity.surface, "assembling-machine-1-level-" .. math.min(should_have_level, 25), event.created_entity)
                     elseif created_entity_name == "assembling-machine-2" then
-                        upgrade_factory(event.created_entity.surface, "assembling-machine-2-level-" .. math.min(should_have_level, 50), event.created_entity, 50)
+                        upgrade_factory(event.created_entity.surface, "assembling-machine-2-level-" .. math.min(should_have_level, 50), event.created_entity)
                     elseif created_entity_name == "assembling-machine-3" then
-                        upgrade_factory(event.created_entity.surface, "assembling-machine-3-level-" .. math.min(should_have_level, 100), event.created_entity, 100)
+                        upgrade_factory(event.created_entity.surface, "assembling-machine-3-level-" .. math.min(should_have_level, 100), event.created_entity)
                     end
                     return
                 end
