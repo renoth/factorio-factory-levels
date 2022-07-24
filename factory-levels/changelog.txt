@@ -1,3 +1,7 @@
+Version: 0.2.1
+  - Buildings now start with proper level on constructon if stored levels allow for it
+  - Buildings now level up instantly to the proper level
+-------------------------------------------------------
 Version: 0.2.0
   - New Levelup mechanic: More productivity on levelup
   - New Levelup mechanic: Additional modules slots at certain levels (20 for Assembler 1; 20 and 40 for Assembler 2 and 25, 50, 75 and 100 for Assembler 3)
