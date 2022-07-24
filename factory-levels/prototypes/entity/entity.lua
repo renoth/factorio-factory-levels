@@ -152,6 +152,10 @@ for i = 1, 25, 1 do
         furnaceLeveled.base_productivity = 0.002 * i
     end
 
+    if mods["space-exploration"] then
+        furnaceLeveled.crafting_categories = { "smelting", "kiln" }
+    end
+
     data:extend({ furnaceLeveled })
 end
 
@@ -196,6 +200,10 @@ for i = 1, 100, 1 do
     elseif (settings.startup["factory-levels-enable-module-bonus"].value and i >= 25) then
         furnaceLeveled.module_specification = { module_slots = 1 }
         furnaceLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
+    end
+
+    if mods["space-exploration"] then
+        furnaceLeveled.crafting_categories = { "smelting", "kiln" }
     end
 
     data:extend({ furnaceLeveled })
