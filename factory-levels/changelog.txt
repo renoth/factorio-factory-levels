@@ -1,3 +1,9 @@
+Version: 0.2.3
+  - Fix bug: Levels of entities could exceed max level for entity
+-------------------------------------------------------
+Version: 0.2.2
+  - fix bug
+-------------------------------------------------------
 Version: 0.2.1
   - Buildings now start with proper level on constructon if stored levels allow for it
   - Buildings now level up instantly to the proper level
