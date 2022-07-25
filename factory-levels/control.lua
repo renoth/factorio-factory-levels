@@ -10,6 +10,40 @@ function string_starts_with(str, start)
     return str:sub(1, #start) == start
 end
 
+machines = {
+	-- Assemblers
+	{
+		name = "assembling-machine-1",
+		level_name = "assembling-machine-1-level-",
+		max_level = 25,
+		next_machine = "assembling-machine-2"
+	},
+	{
+		name = "assembling-machine-2",
+		level_name = "assembling-machine-2-level-",
+		max_level = 50,
+		next_machine = "assembling-machine-3"
+	},
+	{
+		name = "assembling-machine-3",
+		level_name = "assembling-machine-3-level-",
+		max_level = 100
+	},
+	
+	-- Smelters
+	{
+		name = "stone-furnace",
+		level_name = "stone-furnace-level-",
+		max_level = 25,
+		next_machine = "steel-furnace"
+	},
+	{
+		name = "steel-furnace",
+		level_name = "steel-furnace-level-",
+		max_level = 100
+	}
+}
+
 required_items_for_levels = {
 }
 
@@ -51,76 +85,32 @@ function upgrade_factory(surface, targetname, sourceentity)
     return created
 end
 
-function replace_assembler(entities, surface)
+function replace_machines(entities, surface)
     for _, entity in pairs(entities) do
         local should_have_level = determine_level(entity.products_finished)
-
-        if (entity.name == "assembling-machine-1" and entity.products_finished > 0) then
-            upgrade_factory(surface, "assembling-machine-1-level-" .. math.min(should_have_level, 25), entity)
-        elseif (entity.name == "assembling-machine-2" and entity.products_finished > 0) then
-            upgrade_factory(surface, "assembling-machine-2-level-" .. math.min(should_have_level, 50), entity)
-        elseif (entity.name == "assembling-machine-3" and entity.products_finished > 0) then
-            upgrade_factory(surface, "assembling-machine-3-level-" .. math.min(should_have_level, 100), entity)
-        else
-            local current_level = tonumber(string.match(entity.name, "%d+$"))
-
-            if string_starts_with(entity.name, "assembling-machine-1-level-") then
-                if (should_have_level > current_level and current_level < 25) then
-                    upgrade_factory(surface, "assembling-machine-1-level-" .. math.min(should_have_level, 25), entity)
-                elseif (current_level == 25 and entity.name == "assembling-machine-1-level-25") then
-                    local created = upgrade_factory(surface, "assembling-machine-2", entity)
-                    created.products_finished = 0
-                end
-            elseif string_starts_with(entity.name, "assembling-machine-2-level-") then
-                if (should_have_level > current_level and current_level < 50) then
-                    upgrade_factory(surface, "assembling-machine-2-level-" .. math.min(should_have_level, 50), entity)
-                elseif (current_level == 50 and entity.name == "assembling-machine-2-level-50") then
-                    local created = upgrade_factory(surface, "assembling-machine-3", entity)
-                    created.products_finished = 0
-                end
-            elseif string_starts_with(entity.name, "assembling-machine-3-level-") then
-                if (should_have_level > current_level and current_level < 100) then
-                    upgrade_factory(surface, "assembling-machine-3-level-" .. math.min(should_have_level, 100), entity)
-                end
-            end
-        end
-    end
-end
-
-function replace_smelters(entities, surface)
-    for _, entity in pairs(entities) do
-        local should_have_level = determine_level(entity.products_finished)
-
-        if (entity.name == "stone-furnace" and entity.products_finished > 0) then
-            upgrade_factory(surface, "stone-furnace-level-" .. math.min(should_have_level, 25), entity)
-        elseif (entity.name == "steel-furnace" and entity.products_finished > 0) then
-            upgrade_factory(surface, "steel-furnace-level-" .. math.min(should_have_level, 100), entity)
-        else
-            local current_level = tonumber(string.match(entity.name, "%d+$"))
-
-            if string_starts_with(entity.name, "stone-furnace-level-") then
-                if (should_have_level > current_level and current_level < 25) then
-                    upgrade_factory(surface, "stone-furnace-level-" .. math.min(should_have_level, 25), entity)
-                elseif (current_level == 25 and entity.name == "stone-furnace-level-25") then
-                    local created = upgrade_factory(surface, "steel-furnace", entity)
-                    created.products_finished = 0
-                end
-            elseif string_starts_with(entity.name, "steel-furnace-level-") then
-                if (should_have_level > current_level and current_level < 100) then
-                    upgrade_factory(surface, "steel-furnace-level-" .. math.min(should_have_level, 100), entity)
-                end
-            end
-        end
+		for _, machine in pairs(machines) do
+			if (entity.name == machine.name and entity.products_finished > 0) then
+				upgrade_factory(surface, machine.level_name .. math.min(should_have_level, machine.max_level), entity)
+				break
+			elseif string_starts_with(entity.name, machine.level_name) then
+				local current_level = tonumber(string.match(entity.name, "%d+$"))
+				if (should_have_level > current_level and current_level < machine.max_level) then
+					upgrade_factory(surface, machine.level_name .. math.min(should_have_level, machine.max_level), entity)
+					break
+				elseif (current_level == machine.max_level and machine.next_machine ~= nil) then
+					local created = upgrade_factory(surface, machine.next_machine, entity)
+					created.products_finished = 0
+					break
+				end
+			end
+		end
     end
 end
 
 script.on_nth_tick(300, function(event)
     for _, surface in pairs(game.surfaces) do
-        local assemblers = surface.find_entities_filtered { type = "assembling-machine" }
-        replace_assembler(assemblers, surface)
-
-        local smelters = surface.find_entities_filtered { type = "furnace" }
-        replace_smelters(smelters, surface)
+        local assemblers = surface.find_entities_filtered { type = {"assembling-machine", "furnace"} }
+        replace_machines(assemblers, surface)
     end
 end)
 
@@ -152,14 +142,13 @@ script.on_event(
                     event.created_entity.products_finished = finished_product_count
 
                     local created_entity_name = event.created_entity.name
-
-                    if created_entity_name == "assembling-machine-1" then
-                        upgrade_factory(event.created_entity.surface, "assembling-machine-1-level-" .. math.min(should_have_level, 25), event.created_entity)
-                    elseif created_entity_name == "assembling-machine-2" then
-                        upgrade_factory(event.created_entity.surface, "assembling-machine-2-level-" .. math.min(should_have_level, 50), event.created_entity)
-                    elseif created_entity_name == "assembling-machine-3" then
-                        upgrade_factory(event.created_entity.surface, "assembling-machine-3-level-" .. math.min(should_have_level, 100), event.created_entity)
-                    end
+					for _, machine in pairs(machines) do
+						if created_entity_name == machine.name then
+							local created = upgrade_factory(event.created_entity.surface, machine.level_name .. math.min(should_have_level, machine.max_level), event.created_entity)
+							created.products_finished = finished_product_count
+							return
+						end
+					end
                     return
                 end
             end
@@ -171,12 +160,13 @@ script.on_event(
                     event.created_entity.products_finished = finished_product_count
 
                     local created_entity_name = event.created_entity.name
-
-                    if created_entity_name == "stone-furnace" then
-                        upgrade_factory(event.created_entity.surface, "stone-furnace-level-" .. math.min(should_have_level, 25), event.created_entity)
-                    elseif created_entity_name == "steel-furnace" then
-                        upgrade_factory(event.created_entity.surface, "steel-furnace-level-" .. math.min(should_have_level, 100), event.created_entity)
-                    end
+                    for _, machine in pairs(machines) do
+						if created_entity_name == machine.name then
+							local created = upgrade_factory(event.created_entity.surface, machine.level_name .. math.min(should_have_level, machine.max_level), event.created_entity)
+							created.products_finished = finished_product_count
+							return
+						end
+					end
                     return
                 end
             end
