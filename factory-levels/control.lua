@@ -44,6 +44,22 @@ machines = {
 	}
 }
 
+remote.add_interface("factory_levels", {
+	add_machine = function(machine)
+		if machine.name == nil or machine.level_name == nil or machine.max_level == nil then
+			return false
+		else
+			table.insert(machines, machine)
+			for i = 1, machine.max_level, 1 do
+				if required_items_for_levels[i] == nil then
+					table.insert(required_items_for_levels, math.floor(1 + math.pow(i, exponent)))
+				end
+			end
+			return true
+		end
+	end
+})
+
 required_items_for_levels = {
 }
 
