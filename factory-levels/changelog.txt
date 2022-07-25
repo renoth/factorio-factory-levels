@@ -1,3 +1,9 @@
+Version: 0.3.0
+  - Thanks to CaitSith2: External API for adding entities to leveling
+-------------------------------------------------------
+Version: 0.2.5
+  - Bugfix: Spilling of input is fixed now
+-------------------------------------------------------
 Version: 0.2.3
   - Fix bug: Levels of entities could exceed max level for entity
 -------------------------------------------------------
