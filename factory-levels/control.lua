@@ -81,6 +81,18 @@ function determine_level(finished_products_count)
 	return should_have_level
 end
 
+function determine_machine(entity)
+	if entity == nil or not entity.valid or (entity.type ~= "assembling-machine" and entity.type ~= "furnace") then
+		return nil
+	end
+	for _, machine in pairs(machines) do
+		if entity.name == machine.name or string_starts_with(entity.name, machine.level_name) then
+			return machine
+		end
+	end
+	return nil
+end
+
 function upgrade_factory(surface, targetname, sourceentity)
 	local count = sourceentity.products_finished
 	local box = sourceentity.bounding_box
@@ -148,45 +160,47 @@ script.on_event(
 		end,
 		{ { filter = "type", type = "assembling-machine" },
 		  { filter = "type", type = "furnace" } })
+		  
+function replace_built_entity(entity, finished_product_count)
+	local machine = determine_machine(entity)
+	if finished_product_count ~= nil then
+		local should_have_level = determine_level(finished_product_count)
+		entity.products_finished = finished_product_count
+
+		local created_entity_name = entity.name
+		if machine ~= nil then
+			local created = upgrade_factory(entity.surface, machine.level_name .. math.min(should_have_level, machine.max_level), entity)
+			created.products_finished = finished_product_count
+		end
+	else
+		if machine ~= nil then
+			upgrade_factory(entity.surface, machine.name, entity)
+		end
+	end
+end
+
+function on_built_entity(event)
+	if (event.created_entity ~= nil and event.created_entity.type == "assembling-machine") then
+		local finished_product_count = table.remove(global.stored_products_finished_assemblers)
+		replace_built_entity(event.created_entity, finished_product_count)
+		return
+	end
+
+	if (event.created_entity ~= nil and event.created_entity.type == "furnace") then
+		local finished_product_count = table.remove(global.stored_products_finished_furnaces)
+		replace_built_entity(event.created_entity, finished_product_count)
+		return
+	end
+end
 
 script.on_event(
+		defines.events.on_robot_built_entity,
+		on_built_entity,
+		{ { filter = "type", type = "assembling-machine" },
+		  { filter = "type", type = "furnace" } })
+		  
+script.on_event(
 		defines.events.on_built_entity,
-		function(event)
-			if (event.created_entity ~= nil and event.created_entity.type == "assembling-machine") then
-				local finished_product_count = table.remove(global.stored_products_finished_assemblers)
-				if finished_product_count ~= nil then
-					local should_have_level = determine_level(finished_product_count)
-					event.created_entity.products_finished = finished_product_count
-
-					local created_entity_name = event.created_entity.name
-					for _, machine in pairs(machines) do
-						if created_entity_name == machine.name then
-							local created = upgrade_factory(event.created_entity.surface, machine.level_name .. math.min(should_have_level, machine.max_level), event.created_entity)
-							created.products_finished = finished_product_count
-							return
-						end
-					end
-					return
-				end
-			end
-
-			if (event.created_entity ~= nil and event.created_entity.type == "furnace") then
-				local finished_product_count = table.remove(global.stored_products_finished_furnaces)
-				if finished_product_count ~= nil then
-					local should_have_level = determine_level(finished_product_count)
-					event.created_entity.products_finished = finished_product_count
-
-					local created_entity_name = event.created_entity.name
-					for _, machine in pairs(machines) do
-						if created_entity_name == machine.name then
-							local created = upgrade_factory(event.created_entity.surface, machine.level_name .. math.min(should_have_level, machine.max_level), event.created_entity)
-							created.products_finished = finished_product_count
-							return
-						end
-					end
-					return
-				end
-			end
-		end,
+		on_built_entity,
 		{ { filter = "type", type = "assembling-machine" },
 		  { filter = "type", type = "furnace" } })
