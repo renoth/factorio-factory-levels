@@ -1,7 +1,8 @@
 # factorio-factory-levels
-A mod for factorio [Link to mod portal](https://mods.factorio.com/mod/alien-module)
+A mod for factorio [Link to mod portal](https://mods.factorio.com/mod/factory-levels)
 
-Biters now drop alien ore from which you can smelt alien plates that you can use in alien recipes.
+You want Assemblers and Furnaces that upgrade with more Items produced and smelted?
+This is the mod for you.
 
 ## Building the mod
  
