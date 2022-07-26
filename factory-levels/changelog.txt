@@ -1,3 +1,7 @@
+Version: 0.3.1
+  - Thanks to CaitSith2: Refactoring of Code
+  - Thanks to CaitSith2: Construction via bots also works now
+-------------------------------------------------------
 Version: 0.3.0
   - Thanks to CaitSith2: External API for adding entities to leveling
 -------------------------------------------------------
