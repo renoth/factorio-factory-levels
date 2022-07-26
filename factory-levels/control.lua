@@ -96,14 +96,43 @@ end
 function upgrade_factory(surface, targetname, sourceentity)
 	local count = sourceentity.products_finished
 	local box = sourceentity.bounding_box
+	local item_requests = nil
+	local recipe = nil
+	
+	local existing_requests = surface.find_entity("item-request-proxy", sourceentity.position)
+	if existing_requests then
+		-- Module requests do not survive the machine being replaced.  Preserve them before the machine is replaced.
+		item_requests = {}
+		for module_name, count in pairs(existing_requests.item_requests) do
+			item_requests[module_name] = count
+		end
+	end
+	
+	if sourceentity.type == "assembling-machine" then
+		-- Recipe should survive, but why take that chance.
+		recipe = sourceentity.get_recipe()
+	end
+	
 	local created = surface.create_entity { name = targetname,
 											source = sourceentity,
 											fast_replace = true,
 											spill = false,
 											create_build_effect_smoke = false,
 											position = sourceentity.position,
-											force = "player" }
+											force = sourceentity.force }
+	
+	if item_requests then
+		surface.create_entity({ name = "item-request-proxy",
+								position = created.position,
+								force = created.force,
+								target = created,
+								modules = item_requests })
+	end
+											
 	created.products_finished = count;
+	if created.type == "assembling-machine" and recipe ~= nil then
+		created.set_recipe(recipe)
+	end
 	sourceentity.destroy()
 
 	local old_on_ground = surface.find_entities_filtered { area = box, name = 'item-on-ground' }
