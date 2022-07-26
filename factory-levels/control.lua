@@ -173,7 +173,7 @@ function replace_built_entity(entity, finished_product_count)
 			created.products_finished = finished_product_count
 		end
 	else
-		if machine ~= nil then
+		if machine ~= nil and machine.name ~= entity.name then
 			upgrade_factory(entity.surface, machine.name, entity)
 		end
 	end
