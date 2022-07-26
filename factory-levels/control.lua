@@ -172,21 +172,29 @@ script.on_nth_tick(300, function(event)
 	end
 end)
 
+function on_mined_entity(event)
+	if (event.entity ~= nil and event.entity.products_finished ~= nil and event.entity.products_finished > 0) then
+		if event.entity.type == "furnace" then
+			table.insert(global.stored_products_finished_furnaces, event.entity.products_finished)
+			table.sort(global.stored_products_finished_furnaces)
+		end
+
+		if event.entity.type == "assembling-machine" then
+			table.insert(global.stored_products_finished_assemblers, event.entity.products_finished)
+			table.sort(global.stored_products_finished_assemblers)
+		end
+	end
+end
+
 script.on_event(
 		defines.events.on_player_mined_entity,
-		function(event)
-			if (event.entity ~= nil and event.entity.products_finished ~= nil and event.entity.products_finished > 0) then
-				if event.entity.type == "furnace" then
-					table.insert(global.stored_products_finished_furnaces, event.entity.products_finished)
-					table.sort(global.stored_products_finished_furnaces)
-				end
-
-				if event.entity.type == "assembling-machine" then
-					table.insert(global.stored_products_finished_assemblers, event.entity.products_finished)
-					table.sort(global.stored_products_finished_assemblers)
-				end
-			end
-		end,
+		on_mined_entity,
+		{ { filter = "type", type = "assembling-machine" },
+		  { filter = "type", type = "furnace" } })
+		 
+script.on_event(
+		defines.events.on_robot_mined_entity,
+		on_mined_entity,
 		{ { filter = "type", type = "assembling-machine" },
 		  { filter = "type", type = "furnace" } })
 		  
