@@ -10,6 +10,7 @@ for i = 1, 25, 1 do
     assemblyLeveled.animation.layers[1].tint = leveltint
     assemblyLeveled.animation.layers[2].hr_version.tint = leveltint
     assemblyLeveled.animation.layers[2].tint = leveltint
+	table.insert(assemblyLeveled.flags, "hidden")	-- Hides the machine from "made in"
 
     if (settings.startup["factory-levels-enable-speed-bonus"].value) then
         assemblyLeveled.crafting_speed = 0.5 + i * 0.01
@@ -47,6 +48,7 @@ for i = 1, 50, 1 do
     assemblyLeveled.animation.layers[1].tint = leveltint
     assemblyLeveled.animation.layers[2].hr_version.tint = leveltint
     assemblyLeveled.animation.layers[2].tint = leveltint
+	table.insert(assemblyLeveled.flags, "hidden")
 
     if (settings.startup["factory-levels-enable-speed-bonus"].value) then
         assemblyLeveled.crafting_speed = 0.75 + i * 0.01
@@ -87,6 +89,7 @@ for i = 1, 100, 1 do
     assemblyLeveled.animation.layers[1].tint = leveltint
     assemblyLeveled.animation.layers[2].hr_version.tint = leveltint
     assemblyLeveled.animation.layers[2].tint = leveltint
+	table.insert(assemblyLeveled.flags, "hidden")
 
     if (settings.startup["factory-levels-enable-speed-bonus"].value) then
         assemblyLeveled.crafting_speed = 1.25 + i * 0.0175
@@ -135,6 +138,7 @@ for i = 1, 25, 1 do
     furnaceLeveled.animation.layers[1].tint = leveltint
     furnaceLeveled.animation.layers[2].hr_version.tint = leveltint
     furnaceLeveled.animation.layers[2].tint = leveltint
+	table.insert(furnaceLeveled.flags, "hidden")
 
     if (settings.startup["factory-levels-enable-speed-bonus"].value) then
         furnaceLeveled.crafting_speed = 1 + i * 0.04
@@ -171,6 +175,7 @@ for i = 1, 100, 1 do
     furnaceLeveled.animation.layers[1].tint = leveltint
     furnaceLeveled.animation.layers[2].hr_version.tint = leveltint
     furnaceLeveled.animation.layers[2].tint = leveltint
+	table.insert(furnaceLeveled.flags, "hidden")
 
     if (settings.startup["factory-levels-enable-speed-bonus"].value) then
         furnaceLeveled.crafting_speed = 2 + i * 0.04
