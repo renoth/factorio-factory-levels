@@ -69,6 +69,31 @@ for i = 1, 100, 1 do
 	table.insert(required_items_for_levels, math.floor(1 + math.pow(i, exponent)))
 end
 
+-- global iterators for surfaces
+local function copy_surfaces()
+	--surfaces have to be cached because next() does not work on custom-dict ( game.surfaces )
+	global.surfaces = {}
+	for k, v in pairs(game.surfaces) do
+		global.surfaces[k] = v
+	end
+	-- global.surfaces should never be empty because Nauvis cannot be deleted; Get first index of this table
+	global.current_surface_iter_index = next(global.surfaces, nil)
+end
+
+local function update_surface_iter_index()
+	--Inputting a nil value to next() will get the first table index.
+	--Occasionally next will return nil, and we want to skip nil indexes
+	if global.surfaces == nil then
+		copy_surfaces()
+	end
+
+	global.current_surface_iter_index = next(global.surfaces, global.current_surface_iter_index)
+
+	if global.current_surface_iter_index == nil then
+		global.current_surface_iter_index = next(global.surfaces, global.current_surface_iter_index)
+	end
+end
+
 function determine_level(finished_products_count)
 	local should_have_level = 1
 
@@ -98,7 +123,7 @@ function upgrade_factory(surface, targetname, sourceentity)
 	local box = sourceentity.bounding_box
 	local item_requests = nil
 	local recipe = nil
-	
+
 	local existing_requests = surface.find_entity("item-request-proxy", sourceentity.position)
 	if existing_requests then
 		-- Module requests do not survive the machine being replaced.  Preserve them before the machine is replaced.
@@ -107,12 +132,12 @@ function upgrade_factory(surface, targetname, sourceentity)
 			item_requests[module_name] = count
 		end
 	end
-	
+
 	if sourceentity.type == "assembling-machine" then
 		-- Recipe should survive, but why take that chance.
 		recipe = sourceentity.get_recipe()
 	end
-	
+
 	local created = surface.create_entity { name = targetname,
 											source = sourceentity,
 											fast_replace = true,
@@ -120,7 +145,7 @@ function upgrade_factory(surface, targetname, sourceentity)
 											create_build_effect_smoke = false,
 											position = sourceentity.position,
 											force = sourceentity.force }
-	
+
 	if item_requests then
 		surface.create_entity({ name = "item-request-proxy",
 								position = created.position,
@@ -128,7 +153,7 @@ function upgrade_factory(surface, targetname, sourceentity)
 								target = created,
 								modules = item_requests })
 	end
-											
+
 	created.products_finished = count;
 	if created.type == "assembling-machine" and recipe ~= nil then
 		created.set_recipe(recipe)
@@ -165,10 +190,42 @@ function replace_machines(entities, surface)
 	end
 end
 
-script.on_nth_tick(300, function(event)
-	for _, surface in pairs(game.surfaces) do
-		local assemblers = surface.find_entities_filtered { type = { "assembling-machine", "furnace" } }
-		replace_machines(assemblers, surface)
+script.on_nth_tick(60, function(event)
+
+	--If current iterator index is nil, then we start with the first surface.
+	if global.surfaces == nil then
+		copy_surfaces()
+	end
+
+	--The following if statement should only execute as true on the first pass
+	if global.surface_iterator == nil then
+		local curr_surface = global.surfaces[global.current_surface_iter_index]
+		global.surface_iterator = curr_surface.get_chunks()
+	end
+
+	-- iterate over chunks instead of all at once (abysmal performance on large maps or slow computers)
+	for i = 1, 10 do
+		-- if chunk_iterator() returns nil then move to next surface index.
+		local chunk = global.surface_iterator()
+		--surface iterator returns nil when it reaches the last chunk on the surface OR if the surface is deleted (tested in 0.17.54)
+		if chunk == nil then
+			--Each tick_freq the game will evaluate a cached surface; if invalid it will cycle global.current_surface_iter_index
+			update_surface_iter_index()
+			global.surface_iterator = global.surfaces[global.current_surface_iter_index].get_chunks()
+		else
+			--include logic here to scan each surface @ chunk.
+			local surface = global.surfaces[global.current_surface_iter_index]
+
+			if surface == nil then
+				return
+			end
+
+			local area = { { chunk.x * 32 - 16, chunk.y * 32 - 16 }, { chunk.x * 32 + 16, chunk.y * 32 + 16 } }
+			local assemblers = surface.find_entities_filtered { type = { "assembling-machine", "furnace" }, area = area }
+			replace_machines(assemblers, surface)
+			-- debug
+			-- rendering.draw_rectangle { color = { r = 1, g = 0, b = 0, a = 0.5 }, left_top = { chunk.x * 32 - 16, chunk.y * 32 - 16 }, right_bottom = { chunk.x * 32 + 16, chunk.y * 32 + 16 }, filled = true, surface = surface, time_to_live = 60 }
+		end
 	end
 end)
 
@@ -191,13 +248,13 @@ script.on_event(
 		on_mined_entity,
 		{ { filter = "type", type = "assembling-machine" },
 		  { filter = "type", type = "furnace" } })
-		 
+
 script.on_event(
 		defines.events.on_robot_mined_entity,
 		on_mined_entity,
 		{ { filter = "type", type = "assembling-machine" },
 		  { filter = "type", type = "furnace" } })
-		  
+
 function replace_built_entity(entity, finished_product_count)
 	local machine = determine_machine(entity)
 	if finished_product_count ~= nil then
@@ -235,7 +292,7 @@ script.on_event(
 		on_built_entity,
 		{ { filter = "type", type = "assembling-machine" },
 		  { filter = "type", type = "furnace" } })
-		  
+
 script.on_event(
 		defines.events.on_built_entity,
 		on_built_entity,

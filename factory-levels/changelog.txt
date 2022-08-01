@@ -1,3 +1,6 @@
+Version: 0.4.0
+  - Thanks to idea from unhott in alien-module: increased Performance of mod by iterating over chunks instead of updating everything at once
+-------------------------------------------------------
 Version: 0.3.2
   - Thanks to CaitSith2: Leveled Entities are now hidden in "made in" Tooltip
 -------------------------------------------------------
