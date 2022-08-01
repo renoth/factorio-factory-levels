@@ -1,6 +1,6 @@
 script.on_init(function()
-	global.stored_products_finished_assemblers = { 1000000, 55555 }
-	global.stored_products_finished_furnaces = { 1000000, 55555 }
+	global.stored_products_finished_assemblers = { }
+	global.stored_products_finished_furnaces = { }
 end)
 
 script.on_load(function()
