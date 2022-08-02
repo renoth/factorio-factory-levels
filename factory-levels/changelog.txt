@@ -1,3 +1,9 @@
+Version: 0.4.2
+  - Space Exploration did not work with assembler productivity, now it does
+-------------------------------------------------------
+Version: 0.4.1
+  - Fix initial crafting counts from testing
+-------------------------------------------------------
 Version: 0.4.0
   - Thanks to idea from unhott in alien-module: increased Performance of mod by iterating over chunks instead of updating everything at once
 -------------------------------------------------------

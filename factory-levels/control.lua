@@ -190,7 +190,7 @@ function replace_machines(entities, surface)
 	end
 end
 
-script.on_nth_tick(60, function(event)
+script.on_nth_tick(10, function(event)
 
 	--If current iterator index is nil, then we start with the first surface.
 	if global.surfaces == nil then
