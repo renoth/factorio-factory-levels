@@ -39,7 +39,7 @@ data:extend({
         name = "factory-levels-exponent",
         order = "e",
         minimum_value = 1.5, maximum_value = 5,
-        setting_type = "startup",
+        setting_type = "runtime-global",
         default_value = 3
     }
 })
