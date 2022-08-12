@@ -41,6 +41,18 @@ machines = {
 		name = "steel-furnace",
 		level_name = "steel-furnace-level-",
 		max_level = 100
+	},
+
+	-- refining
+	["chemical-plant"] = {
+		name = "chemical-plant",
+		level_name = "chemical-plant-level-",
+		max_level = 100
+	},
+	["oil-refinery"] = {
+		name = "oil-refinery",
+		level_name = "oil-refinery-level-",
+		max_level = 100
 	}
 }
 
@@ -48,7 +60,7 @@ exponent = settings.global["factory-levels-exponent"].value
 max_level = 1
 function update_machine_levels(overwrite)
 	if overwrite then
-		max_level = 1	-- Just in case another mod cuts the max level of this mods machines to something like 25.
+		max_level = 1    -- Just in case another mod cuts the max level of this mods machines to something like 25.
 		required_items_for_levels = {}
 		exponent = settings.global["factory-levels-exponent"].value
 		for _, machine in pairs(machines) do
@@ -180,8 +192,11 @@ function upgrade_factory(surface, targetname, sourceentity)
 		recipe = sourceentity.get_recipe()
 	end
 
+	-- kind of works but refineries and lvl3 assemblers lose the pipe connections on levelup, this could be a bug?
 	local created = surface.create_entity { name = targetname,
 											source = sourceentity,
+											direction = sourceentity.direction,
+											raise_built = true,
 											fast_replace = true,
 											spill = false,
 											create_build_effect_smoke = false,
@@ -191,6 +206,8 @@ function upgrade_factory(surface, targetname, sourceentity)
 	if item_requests then
 		surface.create_entity({ name = "item-request-proxy",
 								position = created.position,
+								direction = sourceentity.direction,
+								raise_built = true,
 								force = created.force,
 								target = created,
 								modules = item_requests })
@@ -356,7 +373,7 @@ script.on_event(
 		on_built_entity,
 		{ { filter = "type", type = "assembling-machine" },
 		  { filter = "type", type = "furnace" } })
-		
+
 script.on_event(
-		defines.events.on_runtime_mod_setting_changed, 
+		defines.events.on_runtime_mod_setting_changed,
 		on_runtime_mod_setting_changed)		
