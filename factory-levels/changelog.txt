@@ -1,3 +1,9 @@
+Version: ???
+  - Thanks to CaitSith2: Added remote interface command update_machine
+  - Thanks to CaitSith2: Added remote interface command remove_machine
+  - Thanks to CaitSith2: Added remote interface command get_machine
+  - Thanks to CaitSith2: Machine level exponent is now a map setting.
+-------------------------------------------------------
 Version: 0.4.2
   - Space Exploration did not work with assembler productivity, now it does
 -------------------------------------------------------
@@ -24,7 +30,7 @@ Version: 0.2.3
   - Fix bug: Levels of entities could exceed max level for entity
 -------------------------------------------------------
 Version: 0.2.2
-  - fix bug
+  - fix bug: Stone furnace levels 1-25 and steel furnace levels 1-100 were unable to smelt stone into bricks in space exploration
 -------------------------------------------------------
 Version: 0.2.1
   - Buildings now start with proper level on constructon if stored levels allow for it

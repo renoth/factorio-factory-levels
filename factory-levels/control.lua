@@ -12,62 +12,104 @@ end
 
 machines = {
 	-- Assemblers
-	{
+	["assembling-machine-1"] = {
 		name = "assembling-machine-1",
 		level_name = "assembling-machine-1-level-",
 		max_level = 25,
 		next_machine = "assembling-machine-2"
 	},
-	{
+	["assembling-machine-2"] = {
 		name = "assembling-machine-2",
 		level_name = "assembling-machine-2-level-",
 		max_level = 50,
 		next_machine = "assembling-machine-3"
 	},
-	{
+	["assembling-machine-3"] = {
 		name = "assembling-machine-3",
 		level_name = "assembling-machine-3-level-",
 		max_level = 100
 	},
 
 	-- Smelters
-	{
+	["stone-furnace"] = {
 		name = "stone-furnace",
 		level_name = "stone-furnace-level-",
 		max_level = 25,
 		next_machine = "steel-furnace"
 	},
-	{
+	["steel-furnace"] = {
 		name = "steel-furnace",
 		level_name = "steel-furnace-level-",
 		max_level = 100
 	}
 }
 
+exponent = settings.global["factory-levels-exponent"].value
+max_level = 1
+function update_machine_levels(overwrite)
+	if overwrite then
+		max_level = 1	-- Just in case another mod cuts the max level of this mods machines to something like 25.
+		required_items_for_levels = {}
+		exponent = settings.global["factory-levels-exponent"].value
+		for _, machine in pairs(machines) do
+			if max_level < machine.max_level then
+				max_level = machine.max_level
+			end
+		end
+	end
+	for i = 1, max_level, 1 do
+		if required_items_for_levels[i] == nil then
+			table.insert(required_items_for_levels, math.floor(1 + math.pow(i, exponent)))
+		end
+	end
+end
+
 remote.add_interface("factory_levels", {
 	add_machine = function(machine)
 		if machine.name == nil or machine.level_name == nil or machine.max_level == nil then
 			return false
 		else
-			table.insert(machines, machine)
-			for i = 1, machine.max_level, 1 do
-				if required_items_for_levels[i] == nil then
-					table.insert(required_items_for_levels, math.floor(1 + math.pow(i, exponent)))
-				end
+			machines[machine.name] = machine
+			if machine.max_level > max_level then
+				max_level = machine.max_level
+				update_machine_levels()
 			end
 			return true
 		end
+	end,
+	update_machine = function(machine)
+		if machine.name == nil or machines[machine.name] == nil then
+			return false
+		else
+			machines[machine.name].level_name = machine.level_name or machines[machine.name].level_name
+			machines[machine.name].max_level = machine.max_level or machines[machine.name].max_level
+			machines[machine.name].next_machine = machine.next_machine or machines[machine.name].next_machine
+			if machines[machine.name].max_level > max_level then
+				max_level = machines[machine.name].max_level
+				update_machine_levels()
+			end
+			return true
+		end
+	end,
+	remove_machine = function(machine_name)
+		if machine_name == nil or machines[machine_name] == nil then
+			return false
+		end
+		machines[machine_name] = nil
+		return true
+	end,
+	get_machine = function(machine_name)
+		if machine_name == nil then
+			return nil
+		end
+		return machines[machine_name]
 	end
 })
 
 required_items_for_levels = {
 }
 
-exponent = settings.startup["factory-levels-exponent"].value
-
-for i = 1, 100, 1 do
-	table.insert(required_items_for_levels, math.floor(1 + math.pow(i, exponent)))
-end
+update_machine_levels(true)
 
 -- global iterators for surfaces
 local function copy_surfaces()
@@ -287,6 +329,22 @@ function on_built_entity(event)
 	end
 end
 
+function on_runtime_mod_setting_changed(event)
+	update_machine_levels(true)
+	if required_items_for_levels[25] then
+		game.print("Crafts for Level 25: " .. required_items_for_levels[25])
+	end
+	if required_items_for_levels[50] then
+		game.print("Crafts for Level 50: " .. required_items_for_levels[50])
+	end
+	if required_items_for_levels[100] then
+		game.print("Crafts for Level 100: " .. required_items_for_levels[100])
+	end
+	if max_level ~= 100 then
+		game.print("Crafts for Max level of " .. max_level .. ": " .. required_items_for_levels[max_level])
+	end
+end
+
 script.on_event(
 		defines.events.on_robot_built_entity,
 		on_built_entity,
@@ -298,3 +356,7 @@ script.on_event(
 		on_built_entity,
 		{ { filter = "type", type = "assembling-machine" },
 		  { filter = "type", type = "furnace" } })
+		
+script.on_event(
+		defines.events.on_runtime_mod_setting_changed, 
+		on_runtime_mod_setting_changed)		
