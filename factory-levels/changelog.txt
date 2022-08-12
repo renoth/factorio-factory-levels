@@ -1,4 +1,4 @@
-Version: ???
+Version: 0.5.0
   - Thanks to CaitSith2: Added remote interface command update_machine
   - Thanks to CaitSith2: Added remote interface command remove_machine
   - Thanks to CaitSith2: Added remote interface command get_machine
