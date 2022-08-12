@@ -301,11 +301,3 @@ for i = 1, 100, 1 do
 
 	data:extend({ furnaceLeveled })
 end
-
-for i = 1, 99, 1 do
-	local assemblyLeveled = data.raw["assembling-machine"]["oil-refinery-level-" .. i]
-	local assemblyLeveledmax = data.raw["assembling-machine"]["oil-refinery-level-100"]
-	assemblyLeveledmax.fast_replaceable_group = "assembling-machine"
-	assemblyLeveled.next_upgrade = "oil-refinery-level-" .. (i + 1)
-	assemblyLeveled.fast_replaceable_group = "assembling-machine"
-end

@@ -192,7 +192,6 @@ function upgrade_factory(surface, targetname, sourceentity)
 		recipe = sourceentity.get_recipe()
 	end
 
-	-- kind of works but refineries and lvl3 assemblers lose the pipe connections on levelup, this could be a bug?
 	local created = surface.create_entity { name = targetname,
 											source = sourceentity,
 											direction = sourceentity.direction,
@@ -213,11 +212,12 @@ function upgrade_factory(surface, targetname, sourceentity)
 								modules = item_requests })
 	end
 
+	sourceentity.destroy()
+
 	created.products_finished = count;
 	if created.type == "assembling-machine" and recipe ~= nil then
 		created.set_recipe(recipe)
 	end
-	sourceentity.destroy()
 
 	local old_on_ground = surface.find_entities_filtered { area = box, name = 'item-on-ground' }
 	for _, item in pairs(old_on_ground) do
