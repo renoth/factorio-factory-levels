@@ -209,6 +209,10 @@ for i = 1, 100, 1 do
 		chemicalplantLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
 	end
 
+	if mods["space-exploration"] then
+		furnaceLeveled.crafting_categories = { "chemistry", "melting" }
+	end
+
 	data:extend({ chemicalplantLeveled })
 end
 
