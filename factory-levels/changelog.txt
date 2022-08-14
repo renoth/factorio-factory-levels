@@ -1,3 +1,7 @@
+Version: 0.5.2
+  - Disable refinery and chemical plant for now (modules are removed)
+  - fix bug with ghost buildings?
+-------------------------------------------------------
 Version: 0.5.1
   - Added levels for oil refinery and chemical plant
 -------------------------------------------------------

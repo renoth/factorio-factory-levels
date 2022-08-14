@@ -41,19 +41,19 @@ machines = {
 		name = "steel-furnace",
 		level_name = "steel-furnace-level-",
 		max_level = 100
-	},
+	}
 
 	-- refining
-	["chemical-plant"] = {
-		name = "chemical-plant",
-		level_name = "chemical-plant-level-",
-		max_level = 100
-	},
-	["oil-refinery"] = {
-		name = "oil-refinery",
-		level_name = "oil-refinery-level-",
-		max_level = 100
-	}
+	--	["chemical-plant"] = {
+	--		name = "chemical-plant",
+	--		level_name = "chemical-plant-level-",
+	--		max_level = 100
+	--	},
+	--	["oil-refinery"] = {
+	--		name = "oil-refinery",
+	--		level_name = "oil-refinery-level-",
+	--		max_level = 100
+	--	}
 }
 
 exponent = settings.global["factory-levels-exponent"].value
@@ -205,8 +205,6 @@ function upgrade_factory(surface, targetname, sourceentity)
 	if item_requests then
 		surface.create_entity({ name = "item-request-proxy",
 								position = created.position,
-								direction = sourceentity.direction,
-								raise_built = true,
 								force = created.force,
 								target = created,
 								modules = item_requests })
