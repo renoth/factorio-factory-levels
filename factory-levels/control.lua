@@ -183,7 +183,7 @@ function determine_machine(entity)
 end
 
 function upgrade_factory(surface, targetname, sourceentity)
-	local count = sourceentity.products_finished
+	local finished_products_count = sourceentity.products_finished
 	local box = sourceentity.bounding_box
 	local item_requests = nil
 	local recipe = nil
@@ -228,6 +228,7 @@ function upgrade_factory(surface, targetname, sourceentity)
 								target = created,
 								modules = item_requests })
 	end
+
 	new_modules = created.get_module_inventory()
 	if existing_modules and new_modules then
 		if new_modules.is_empty() then
@@ -239,7 +240,7 @@ function upgrade_factory(surface, targetname, sourceentity)
 
 	sourceentity.destroy()
 
-	created.products_finished = count;
+	created.products_finished = finished_products_count;
 	if created.type == "assembling-machine" and recipe ~= nil then
 		created.set_recipe(recipe)
 	end
@@ -274,7 +275,7 @@ function replace_machines(entities, surface)
 	end
 end
 
-script.on_nth_tick(10, function(event)
+script.on_nth_tick(6, function(event)
 
 	--If current iterator index is nil, then we start with the first surface.
 	if global.surfaces == nil then

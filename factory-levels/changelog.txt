@@ -1,3 +1,7 @@
+Version: 0.6.0
+  - Thanks to CaitSith2: Chemical plant, refinery, electric smelter and centrifuge
+  - Thanks to CaitSith2: refactoring of code
+-------------------------------------------------------
 Version: 0.5.2
   - Disable refinery and chemical plant for now (modules are removed)
   - fix bug with ghost buildings?
