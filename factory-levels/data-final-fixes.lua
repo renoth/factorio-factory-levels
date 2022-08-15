@@ -1,29 +1,9 @@
-for i = 1, 25, 1 do
-	local assemblyLeveled = data.raw["assembling-machine"]["assembling-machine-1-level-" .. i]
+factory_levels.fix_productivity(assembling_machine_levels)
+factory_levels.fix_productivity(oil_refinery_levels)
+factory_levels.fix_productivity(chemical_plant_levels)
+factory_levels.fix_productivity(centrifuge_levels)
+factory_levels.fix_productivity(burner_furnace_levels)
+factory_levels.fix_productivity(electric_furnace_levels)
 
-	if (settings.startup["factory-levels-enable-productivity-bonus"].value) then
-		assemblyLeveled.base_productivity = 0.0025 * i
-	end
-
-	data:extend({ assemblyLeveled })
-end
-
-for i = 1, 50, 1 do
-	local assemblyLeveled = data.raw["assembling-machine"]["assembling-machine-2-level-" .. i]
-
-	if (settings.startup["factory-levels-enable-productivity-bonus"].value) then
-		assemblyLeveled.base_productivity = 0.0025 * i
-	end
-
-	data:extend({ assemblyLeveled })
-end
-
-for i = 1, 100, 1 do
-	local assemblyLeveled = data.raw["assembling-machine"]["assembling-machine-3-level-" .. i]
-
-	if (settings.startup["factory-levels-enable-productivity-bonus"].value) then
-		assemblyLeveled.base_productivity = 0.0025 * i
-	end
-
-	data:extend({ assemblyLeveled })
-end
+factory_levels.convert_furnace_to_assembling_machines(burner_furnace_levels)
+factory_levels.convert_furnace_to_assembling_machines(electric_furnace_levels)
