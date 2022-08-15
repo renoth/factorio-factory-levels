@@ -49,16 +49,16 @@ machines = {
 	},
 
 	-- refining
-	--	["chemical-plant"] = {
-	--		name = "chemical-plant",
-	--		level_name = "chemical-plant-level-",
-	--		max_level = 100
-	--	},
-	--	["oil-refinery"] = {
-	--		name = "oil-refinery",
-	--		level_name = "oil-refinery-level-",
-	--		max_level = 100
-	--	}
+	["chemical-plant"] = {
+		name = "chemical-plant",
+		level_name = "chemical-plant-level-",
+		max_level = 100
+	},
+	["oil-refinery"] = {
+		name = "oil-refinery",
+		level_name = "oil-refinery-level-",
+		max_level = 100
+	},
 	["centrifuge"] = {
 		name = "centrifuge",
 		level_name = "centrifuge-level-",
@@ -196,6 +196,15 @@ function upgrade_factory(surface, targetname, sourceentity)
 			item_requests[module_name] = count
 		end
 	end
+	
+	local existing_modules = sourceentity.get_module_inventory()
+	modules_to_insert = {}
+	if existing_modules ~= nil then
+		existing_modules = existing_modules.get_contents()
+		for name, count in pairs(existing_modules) do
+			table.insert(modules_to_insert, {name=name, count=count})
+		end
+	end
 
 	if sourceentity.type == "assembling-machine" then
 		-- Recipe should survive, but why take that chance.
@@ -218,6 +227,14 @@ function upgrade_factory(surface, targetname, sourceentity)
 								force = created.force,
 								target = created,
 								modules = item_requests })
+	end
+	new_modules = created.get_module_inventory()
+	if existing_modules and new_modules then
+		if new_modules.is_empty() then
+			for _, module_set in pairs(modules_to_insert) do
+				new_modules.insert(module_set)
+			end
+		end
 	end
 
 	sourceentity.destroy()
