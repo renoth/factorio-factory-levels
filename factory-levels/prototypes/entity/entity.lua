@@ -1,307 +1,159 @@
-for i = 1, 25, 1 do
-	local leveltint = { r = 1 - 0.02 * i, g = 1 - 0.02 * i, b = 1, 1 }
+assembling_machine_levels = {
+	type = "assembling-machine",
+	tiers = 3,
+	base_machine_names = { "assembling-machine-1", "assembling-machine-2", "assembling-machine-3" },
+	base_level_tints = {
+		{ r = 1, g = 1, b = 1},
+		{ r = 1, g = 1, b = 1},
+		{ r = 1, g = 1, b = 1}
+	},
+	level_tint_multipliers = {
+		{ r = -0.02, g = -0.02, b = 0 },
+		{ r = 0, g = 0, b = -0.016 },
+		{ r = 0, g = -0.008, b = -0.008},
+	},
+	levels = { 25, 50, 100 },
+	base_speeds = { 0.5, 0.75, 1.25 },
+	speed_multipliers = { 0.01, 0.01, 0.0175 },
+	base_consumption = { 75, 150, 375 },
+	consumption_multipliers = {  2.5, 4.5, 7.5 },
+	consumption_unit = { "kW", "kW", "kW" },
+	base_pollution = { 4, 3, 2, },
+	pollution_multipliers = { 0.04, 0.04, 0.04 },
+	base_productivity = { 0, 0, 0 },
+	productivity_multipliers = { 0.0025, 0.0025, 0.0025 },
+	levels_per_module_slots = { 20, 20, 25 },
+	base_module_slots = { 0, 2, 4 },
+	bonus_module_slots = { 1, 1, 1 }
+}
 
-	local assemblyLeveled = util.table.deepcopy(data.raw["assembling-machine"]["assembling-machine-1"])
+factory_levels.create_leveled_machines(assembling_machine_levels)
 
-	assemblyLeveled.name = "assembling-machine-1-level-" .. i
-	assemblyLeveled.minable.result = "assembling-machine-1"
-	assemblyLeveled.placeable_by = { item = "assembling-machine-1", count = 1 }
-	assemblyLeveled.animation.layers[1].hr_version.tint = leveltint
-	assemblyLeveled.animation.layers[1].tint = leveltint
-	assemblyLeveled.animation.layers[2].hr_version.tint = leveltint
-	assemblyLeveled.animation.layers[2].tint = leveltint
-	table.insert(assemblyLeveled.flags, "hidden")    -- Hides the machine from "made in"
 
-	if (settings.startup["factory-levels-enable-speed-bonus"].value) then
-		assemblyLeveled.crafting_speed = 0.5 + i * 0.01
-	end
+oil_refinery_levels = {
+	type = "assembling-machine",
+	tiers = 1,
+	base_machine_names = { "oil-refinery" },
+	base_level_tints = {{ r = 1, g = 1, b = 1 }},
+	level_tint_multipliers = {{ r = 0, g = -0.008, b = -0.008 }},
+	levels = { 100 },
+	base_speeds = { 1 },
+	speed_multipliers = { 0.015 },
+	base_consumption = { 210 },
+	consumption_multipliers = { 5 },
+	consumption_unit = { "kW" },
+	base_pollution = { 6 },
+	pollution_multipliers = { 0.14 },
+	base_productivity = { 0 },
+	productivity_multipliers = { 0.001 },
+	levels_per_module_slots = { 25 },
+	base_module_slots = { 3 },
+	bonus_module_slots = { 1 }
+}
+factory_levels.create_leveled_machines(oil_refinery_levels)
 
-	if (settings.startup["factory-levels-enable-energy-usage"].value) then
-		assemblyLeveled.energy_usage = (75 + 2.5 * i) .. "kW"
-	end
 
-	if (settings.startup["factory-levels-enable-emissions"].value) then
-		assemblyLeveled.energy_source.emissions_per_minute = 4 + 0.04 * i
-	end
-
-	if (settings.startup["factory-levels-enable-productivity-bonus"].value) then
-		assemblyLeveled.base_productivity = 0.0025 * i
-	end
-
-	if (settings.startup["factory-levels-enable-module-bonus"].value and i >= 20) then
-		assemblyLeveled.module_specification = { module_slots = 1 }
-		assemblyLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
-	end
-
-	data:extend({ assemblyLeveled })
+chemical_plant_levels = {
+	type = "assembling-machine",
+	tiers = 1,
+	base_machine_names = { "chemical-plant" },
+	base_level_tints = {{ r = 1, g = 1, b = 1 }},
+	level_tint_multipliers = {{ r = 0, g = -0.008, b = -0.008 }},
+	levels = { 100 },
+	base_speeds = { 1 },
+	speed_multipliers = { 0.015 },
+	base_consumption = { 210 },
+	consumption_multipliers = { 5 },
+	consumption_unit = { "kW" },
+	base_pollution = { 4 },
+	pollution_multipliers = { 0.06 },
+	base_productivity = { 0 },
+	productivity_multipliers = { 0.001 },
+	levels_per_module_slots = { 25 },
+	base_module_slots = { 3 },
+	bonus_module_slots = { 1 }
+}
+if mods["space-exploration"] then
+	table.insert(data.raw["assembling-machine"]["chemical-plant"].crafting_categories, "melting")
 end
+factory_levels.create_leveled_machines(chemical_plant_levels)
 
-for i = 1, 50, 1 do
-	local leveltint = { r = 1, g = 1, b = 1 - 0.016 * i, 1 }
-
-	local assemblyLeveled = util.table.deepcopy(data.raw["assembling-machine"]["assembling-machine-2"])
-
-	assemblyLeveled.name = "assembling-machine-2-level-" .. i
-	assemblyLeveled.minable.result = "assembling-machine-2"
-	assemblyLeveled.placeable_by = { item = "assembling-machine-2", count = 1 }
-	assemblyLeveled.animation.layers[1].hr_version.tint = leveltint
-	assemblyLeveled.animation.layers[1].tint = leveltint
-	assemblyLeveled.animation.layers[2].hr_version.tint = leveltint
-	assemblyLeveled.animation.layers[2].tint = leveltint
-	table.insert(assemblyLeveled.flags, "hidden")
-
-	if (settings.startup["factory-levels-enable-speed-bonus"].value) then
-		assemblyLeveled.crafting_speed = 0.75 + i * 0.01
-	end
-
-	if (settings.startup["factory-levels-enable-energy-usage"].value) then
-		assemblyLeveled.energy_usage = (150 + 4.5 * i) .. "kW"
-	end
-
-	if (settings.startup["factory-levels-enable-emissions"].value) then
-		assemblyLeveled.energy_source.emissions_per_minute = 3 + 0.04 * i
-	end
-
-	if (settings.startup["factory-levels-enable-productivity-bonus"].value) then
-		assemblyLeveled.base_productivity = 0.0025 * i
-	end
-
-	if (settings.startup["factory-levels-enable-module-bonus"].value and i >= 40) then
-		assemblyLeveled.module_specification = { module_slots = 4 }
-		assemblyLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
-	elseif (settings.startup["factory-levels-enable-module-bonus"].value and i >= 20) then
-		assemblyLeveled.module_specification = { module_slots = 3 }
-		assemblyLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
-	end
-
-	data:extend({ assemblyLeveled })
-end
-
-for i = 1, 100, 1 do
-	local leveltint = { r = 1, g = 1 - 0.008 * i, b = 1 - 0.008 * i, 1 }
-
-	local assemblyLeveled = util.table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"])
-
-	assemblyLeveled.name = "assembling-machine-3-level-" .. i
-	assemblyLeveled.minable.result = "assembling-machine-3"
-	assemblyLeveled.placeable_by = { item = "assembling-machine-3", count = 1 }
-	assemblyLeveled.animation.layers[1].hr_version.tint = leveltint
-	assemblyLeveled.animation.layers[1].tint = leveltint
-	assemblyLeveled.animation.layers[2].hr_version.tint = leveltint
-	assemblyLeveled.animation.layers[2].tint = leveltint
-	table.insert(assemblyLeveled.flags, "hidden")
-
-	if (settings.startup["factory-levels-enable-speed-bonus"].value) then
-		assemblyLeveled.crafting_speed = 1.25 + i * 0.0175
-	end
-
-	if (settings.startup["factory-levels-enable-energy-usage"].value) then
-		assemblyLeveled.energy_usage = (375 + 7.5 * i) .. "kW"
-	end
-
-	if (settings.startup["factory-levels-enable-emissions"].value) then
-		assemblyLeveled.energy_source.emissions_per_minute = 2 + 0.04 * i
-	end
-
-	if (settings.startup["factory-levels-enable-productivity-bonus"].value) then
-		assemblyLeveled.base_productivity = 0.0025 * i
-	end
-
-	if (settings.startup["factory-levels-enable-module-bonus"].value and i >= 100) then
-		assemblyLeveled.module_specification = { module_slots = 8 }
-		assemblyLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
-	elseif (settings.startup["factory-levels-enable-module-bonus"].value and i >= 75) then
-		assemblyLeveled.module_specification = { module_slots = 7 }
-		assemblyLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
-	elseif (settings.startup["factory-levels-enable-module-bonus"].value and i >= 50) then
-		assemblyLeveled.module_specification = { module_slots = 6 }
-		assemblyLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
-	elseif (settings.startup["factory-levels-enable-module-bonus"].value and i >= 25) then
-		assemblyLeveled.module_specification = { module_slots = 5 }
-		assemblyLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
-	end
-
-	data:extend({ assemblyLeveled })
-end
---
---for i = 1, 100, 1 do
---	local leveltint = { r = 1, g = 1 - 0.008 * i, b = 1 - 0.008 * i, 1 }
---
---	local refineryLeveled = util.table.deepcopy(data.raw["assembling-machine"]["oil-refinery"])
---
---	refineryLeveled.name = "oil-refinery-level-" .. i
---	refineryLeveled.minable.result = "oil-refinery"
---	refineryLeveled.placeable_by = { item = "oil-refinery", count = 1 }
---	refineryLeveled.animation.tint = leveltint
---	table.insert(refineryLeveled.flags, "hidden")
---
---	if (settings.startup["factory-levels-enable-speed-bonus"].value) then
---		refineryLeveled.crafting_speed = 1 + i * 0.015
---	end
---
---	if (settings.startup["factory-levels-enable-energy-usage"].value) then
---		refineryLeveled.energy_usage = (210 + 5 * i) .. "kW"
---	end
---
---	if (settings.startup["factory-levels-enable-emissions"].value) then
---		refineryLeveled.energy_source.emissions_per_minute = 6 + 0.14 * i
---	end
---
---	if (settings.startup["factory-levels-enable-productivity-bonus"].value) then
---		refineryLeveled.base_productivity = 0.001 * i
---	end
---
---	if (settings.startup["factory-levels-enable-module-bonus"].value and i >= 100) then
---		refineryLeveled.module_specification = { module_slots = 7 }
---		refineryLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
---	elseif (settings.startup["factory-levels-enable-module-bonus"].value and i >= 75) then
---		refineryLeveled.module_specification = { module_slots = 6 }
---		refineryLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
---	elseif (settings.startup["factory-levels-enable-module-bonus"].value and i >= 50) then
---		refineryLeveled.module_specification = { module_slots = 5 }
---		refineryLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
---	elseif (settings.startup["factory-levels-enable-module-bonus"].value and i >= 25) then
---		refineryLeveled.module_specification = { module_slots = 4 }
---		refineryLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
---	end
---
---	data:extend({ refineryLeveled })
---end
---
---for i = 1, 100, 1 do
---	local leveltint = { r = 1, g = 1 - 0.008 * i, b = 1 - 0.008 * i, 1 }
---
---	local chemicalplantLeveled = util.table.deepcopy(data.raw["assembling-machine"]["chemical-plant"])
---
---	chemicalplantLeveled.name = "chemical-plant-level-" .. i
---	chemicalplantLeveled.minable.result = "chemical-plant"
---	chemicalplantLeveled.placeable_by = { item = "chemical-plant", count = 1 }
---	chemicalplantLeveled.animation.tint = leveltint
---	table.insert(chemicalplantLeveled.flags, "hidden")
---
---	if (settings.startup["factory-levels-enable-speed-bonus"].value) then
---		chemicalplantLeveled.crafting_speed = 1 + i * 0.015
---	end
---
---	if (settings.startup["factory-levels-enable-energy-usage"].value) then
---		chemicalplantLeveled.energy_usage = (210 + 5 * i) .. "kW"
---	end
---
---	if (settings.startup["factory-levels-enable-emissions"].value) then
---		chemicalplantLeveled.energy_source.emissions_per_minute = 4 + 0.06 * i
---	end
---
---	if (settings.startup["factory-levels-enable-productivity-bonus"].value) then
---		chemicalplantLeveled.base_productivity = 0.001 * i
---	end
---
---	if (settings.startup["factory-levels-enable-module-bonus"].value and i >= 100) then
---		chemicalplantLeveled.module_specification = { module_slots = 7 }
---		chemicalplantLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
---	elseif (settings.startup["factory-levels-enable-module-bonus"].value and i >= 75) then
---		chemicalplantLeveled.module_specification = { module_slots = 6 }
---		chemicalplantLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
---	elseif (settings.startup["factory-levels-enable-module-bonus"].value and i >= 50) then
---		chemicalplantLeveled.module_specification = { module_slots = 5 }
---		chemicalplantLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
---	elseif (settings.startup["factory-levels-enable-module-bonus"].value and i >= 25) then
---		chemicalplantLeveled.module_specification = { module_slots = 4 }
---		chemicalplantLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
---	end
---
---	if mods["space-exploration"] then
---		chemicalplantLeveled.crafting_categories = { "chemistry", "melting" }
---	end
---
---	data:extend({ chemicalplantLeveled })
---end
+centrifuge_levels = {
+	type = "assembling-machine",
+	tiers = 1,
+	base_machine_names = { "centrifuge" },
+	base_level_tints = {{ r = 1, g = 1, b = 1 }},
+	level_tint_multipliers = {{ r = 0, g = -0.008, b = -0.008 }},
+	levels = { 100 },
+	base_speeds = { 1 },
+	speed_multipliers = { 0.015 },
+	base_consumption = { 350 },
+	consumption_multipliers = { 5 },
+	consumption_unit = { "kW" },
+	base_pollution = { 4 },
+	pollution_multipliers = { 0.06 },
+	base_productivity = { 0 },
+	productivity_multipliers = { 0.001 },
+	levels_per_module_slots = { 25 },
+	base_module_slots = { 2},
+	bonus_module_slots = { 1 }
+}
+factory_levels.create_leveled_machines(centrifuge_levels)
 
 -- Furnaces
+burner_furnace_levels = {
+	type = "furnace",
+	tiers = 2,
+	base_machine_names = { "stone-furnace", "steel-furnace" },
+	base_level_tints = {
+		{ r = 1, g = 1, b = 1},
+		{ r = 1, g = 1, b = 1}
+	},
+	level_tint_multipliers = {
+		{ r = 0, g = -0.032, b = -0.032 },
+		{ r = 0, g = -0.008, b = -0.008 }
+	},
+	levels = { 25, 100 },
+	base_speeds = { 1, 2 },
+	speed_multipliers = { 0.04, 0.04 },
+	base_consumption = { 90, 90 },
+	consumption_multipliers = {  1, 2 },
+	consumption_unit = { "kW", "kW" },
+	base_pollution = { 2, 4 },
+	pollution_multipliers = { 0.04, 0.12 },
+	base_productivity = { 0, 0 },
+	productivity_multipliers = { 0.002, 0.002},
+	levels_per_module_slots = { 25, 25 },
+	base_module_slots = { 0, 0 },
+	bonus_module_slots = { 0, 1 },
+}
 
-for i = 1, 25, 1 do
-	local leveltint = { r = 1 - 0.032 * i, g = 1 - 0.032 * i, b = 1, 1 }
+electric_furnace_levels = {
+	type = "furnace",
+	tiers = 1,
+	base_machine_names = { "electric-furnace" },
+	base_level_tints = {{ r = 1, g = 1, b = 1 }},
+	level_tint_multipliers = {{ r = 0, g = -0.008, b = -0.008 }},
+	levels = { 100 },
+	base_speeds = { 2 },
+	speed_multipliers = { 0.04 },
+	base_consumption = { 180 },
+	consumption_multipliers = { 2.8 },
+	consumption_unit = { "kW" },
+	base_pollution = { 1 },
+	pollution_multipliers = { 0.12 },
+	base_productivity = { 0 },
+	productivity_multipliers = { 0.002 },
+	levels_per_module_slots = { 25 },
+	base_module_slots = { 2 },
+	bonus_module_slots = { 1 }
+}
 
-	local furnaceLeveled = util.table.deepcopy(data.raw["furnace"]["stone-furnace"])
-
-	furnaceLeveled.name = "stone-furnace-level-" .. i
-	furnaceLeveled.minable.result = "stone-furnace"
-	furnaceLeveled.placeable_by = { item = "stone-furnace", count = 1 }
-	furnaceLeveled.animation.layers[1].hr_version.tint = leveltint
-	furnaceLeveled.animation.layers[1].tint = leveltint
-	furnaceLeveled.animation.layers[2].hr_version.tint = leveltint
-	furnaceLeveled.animation.layers[2].tint = leveltint
-	table.insert(furnaceLeveled.flags, "hidden")
-
-	if (settings.startup["factory-levels-enable-speed-bonus"].value) then
-		furnaceLeveled.crafting_speed = 1 + i * 0.04
-	end
-
-	if (settings.startup["factory-levels-enable-energy-usage"].value) then
-		furnaceLeveled.energy_usage = (90 + 1 * i) .. "kW"
-	end
-
-	if (settings.startup["factory-levels-enable-emissions"].value) then
-		furnaceLeveled.energy_source.emissions_per_minute = 2 + 0.04 * i
-	end
-
-	if (settings.startup["factory-levels-enable-productivity-bonus"].value) then
-		furnaceLeveled.base_productivity = 0.002 * i
-	end
-
-	if mods["space-exploration"] then
-		furnaceLeveled.crafting_categories = { "smelting", "kiln" }
-	end
-
-	data:extend({ furnaceLeveled })
+if mods["space-exploration"] then
+	table.insert(data.raw["furnace"]["stone-furnace"].crafting_categories, "kiln")
+	table.insert(data.raw["furnace"]["steel-furnace"].crafting_categories, "kiln")
+	table.insert(data.raw["furnace"]["electric-furnace"].crafting_categories, "kiln")
 end
 
-for i = 1, 100, 1 do
-	local leveltint = { r = 1, g = 1 - 0.008 * i, b = 1 - 0.008 * i, 1 }
-
-	local furnaceLeveled = util.table.deepcopy(data.raw["furnace"]["steel-furnace"])
-
-	furnaceLeveled.name = "steel-furnace-level-" .. i
-	furnaceLeveled.minable.result = "steel-furnace"
-	furnaceLeveled.placeable_by = { item = "steel-furnace", count = 1 }
-	furnaceLeveled.animation.layers[1].hr_version.tint = leveltint
-	furnaceLeveled.animation.layers[1].tint = leveltint
-	furnaceLeveled.animation.layers[2].hr_version.tint = leveltint
-	furnaceLeveled.animation.layers[2].tint = leveltint
-	table.insert(furnaceLeveled.flags, "hidden")
-
-	if (settings.startup["factory-levels-enable-speed-bonus"].value) then
-		furnaceLeveled.crafting_speed = 2 + i * 0.04
-	end
-
-	if (settings.startup["factory-levels-enable-energy-usage"].value) then
-		furnaceLeveled.energy_usage = (90 + 2 * i) .. "kW"
-	end
-
-	if (settings.startup["factory-levels-enable-emissions"].value) then
-		furnaceLeveled.energy_source.emissions_per_minute = 4 + 0.12 * i
-	end
-
-	if (settings.startup["factory-levels-enable-productivity-bonus"].value) then
-		furnaceLeveled.base_productivity = 0.002 * i
-	end
-
-	if (settings.startup["factory-levels-enable-module-bonus"].value and i >= 100) then
-		furnaceLeveled.module_specification = { module_slots = 4 }
-		furnaceLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
-	elseif (settings.startup["factory-levels-enable-module-bonus"].value and i >= 75) then
-		furnaceLeveled.module_specification = { module_slots = 3 }
-		furnaceLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
-	elseif (settings.startup["factory-levels-enable-module-bonus"].value and i >= 50) then
-		furnaceLeveled.module_specification = { module_slots = 2 }
-		furnaceLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
-	elseif (settings.startup["factory-levels-enable-module-bonus"].value and i >= 25) then
-		furnaceLeveled.module_specification = { module_slots = 1 }
-		furnaceLeveled.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
-	end
-
-	if mods["space-exploration"] then
-		furnaceLeveled.crafting_categories = { "smelting", "kiln" }
-	end
-
-	data:extend({ furnaceLeveled })
-end
+factory_levels.create_leveled_machines(burner_furnace_levels)
+factory_levels.create_leveled_machines(electric_furnace_levels)

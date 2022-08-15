@@ -41,7 +41,12 @@ machines = {
 		name = "steel-furnace",
 		level_name = "steel-furnace-level-",
 		max_level = 100
-	}
+	},
+	["electric-furnace"] = {
+		name = "electric-furnace",
+		level_name = "electric-furnace-level-",
+		max_level = 100
+	},
 
 	-- refining
 	--	["chemical-plant"] = {
@@ -54,6 +59,11 @@ machines = {
 	--		level_name = "oil-refinery-level-",
 	--		max_level = 100
 	--	}
+	["centrifuge"] = {
+		name = "centrifuge",
+		level_name = "centrifuge-level-",
+		max_level = 100
+	}
 }
 
 exponent = settings.global["factory-levels-exponent"].value
