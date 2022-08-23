@@ -155,7 +155,7 @@ function factory_levels.fix_productivity(machines)
 	for tier = 1, machines.tiers, 1 do
 		for level = 0, machines.levels[tier], 1 do
 			local machine = factory_levels.get_or_create_machine(machines.type, machines.base_machine_names[tier], level)
-			if machine.base_productivity == 0 then
+			if machine.base_productivity == 0 or machine.base_productivity == nil then
 				factory_levels.update_machine_productivity(machine, level, machines.base_productivity[tier], machines.productivity_multipliers[tier])
 			end
 		end
