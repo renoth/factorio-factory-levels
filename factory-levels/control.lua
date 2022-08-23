@@ -182,6 +182,28 @@ function determine_machine(entity)
 	return nil
 end
 
+function get_inventory_contents(inventory)
+	inventory_results = {}
+	if inventory == nil then
+		return inventory_results
+	end
+	
+	inventory_contents = inventory.get_contents()
+	for name, count in pairs(inventory_contents) do
+		table.insert(inventory_results, {name=name, count=count})
+	end
+	return inventory_results
+end
+
+function insert_inventory_contents(inventory, contents)
+	if inventory == nil or not inventory.is_empty() then
+		return
+	end
+	for _, item in pairs(contents) do
+		inventory.insert(item)
+	end
+end
+
 function upgrade_factory(surface, targetname, sourceentity)
 	local finished_products_count = sourceentity.products_finished
 	local box = sourceentity.bounding_box
@@ -197,14 +219,18 @@ function upgrade_factory(surface, targetname, sourceentity)
 		end
 	end
 	
-	local existing_modules = sourceentity.get_module_inventory()
-	modules_to_insert = {}
-	if existing_modules ~= nil then
-		existing_modules = existing_modules.get_contents()
-		for name, count in pairs(existing_modules) do
-			table.insert(modules_to_insert, {name=name, count=count})
-		end
+	-- For unknown reasons, Factorio is voiding ALL of the inventories of the machine.
+	local input_inventory = {}
+	if sourceentity.type == "assembling-machine" then
+		input_inventory = get_inventory_contents(sourceentity.get_inventory(defines.inventory.assembling_machine_input))
+	elseif sourceentity.type == "furnace" then
+		input_inventory = get_inventory_contents(sourceentity.get_inventory(defines.inventory.furnace_source))
 	end
+	local output_inventory = get_inventory_contents(sourceentity.get_output_inventory())
+	local module_inventory = get_inventory_contents(sourceentity.get_module_inventory())
+	local fuel_inventory = get_inventory_contents(sourceentity.get_fuel_inventory())
+	local burnt_result_inventory = get_inventory_contents(sourceentity.get_burnt_result_inventory())
+	
 
 	if sourceentity.type == "assembling-machine" then
 		-- Recipe should survive, but why take that chance.
@@ -229,21 +255,22 @@ function upgrade_factory(surface, targetname, sourceentity)
 								modules = item_requests })
 	end
 
-	new_modules = created.get_module_inventory()
-	if existing_modules and new_modules then
-		if new_modules.is_empty() then
-			for _, module_set in pairs(modules_to_insert) do
-				new_modules.insert(module_set)
-			end
-		end
-	end
-
 	sourceentity.destroy()
 
 	created.products_finished = finished_products_count;
 	if created.type == "assembling-machine" and recipe ~= nil then
 		created.set_recipe(recipe)
 	end
+	
+	if created.type == "assembling-machine" then
+		insert_inventory_contents(created.get_inventory(defines.inventory.assembling_machine_input), input_inventory)
+	elseif created.type == "furnace" then
+		insert_inventory_contents(created.get_inventory(defines.inventory.furnace_source), input_inventory)
+	end
+	insert_inventory_contents(created.get_output_inventory(), output_inventory)
+	insert_inventory_contents(created.get_module_inventory(), module_inventory)
+	insert_inventory_contents(created.get_fuel_inventory(), fuel_inventory)
+	insert_inventory_contents(created.get_burnt_result_inventory(), burnt_result_inventory)
 
 	local old_on_ground = surface.find_entities_filtered { area = box, name = 'item-on-ground' }
 	for _, item in pairs(old_on_ground) do
