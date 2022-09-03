@@ -114,6 +114,7 @@ function factory_levels.create_leveled_machines(machines)
 				end
 				machine.minable.result = machines.base_machine_names[tier]
 				machine.placeable_by = { item = machines.base_machine_names[tier], count = 1 }
+				machine.localised_name = { "entity-name.factory-levels", {"entity-name." .. machines.base_machine_names[tier]}, level }
 				machine.localised_description = { "entity-description." .. machines.base_machine_names[tier] }
 			end
 			factory_levels.update_machine_speed(machine, level, machines.base_speeds[tier], machines.speed_multipliers[tier])
