@@ -1,7 +1,33 @@
 script.on_init(function()
 	global.stored_products_finished_assemblers = { }
 	global.stored_products_finished_furnaces = { }
+	get_built_machines()
 end)
+
+script.on_configuration_changed(function()
+	get_built_machines()
+end)
+
+function get_built_machines()
+	global.built_machines = global.built_machines or {}
+	for unit_number, machine in pairs(global.built_machines) do
+		-- Remove invalid machines from the global table.
+		if not machine.entity or not machine.entity.valid then
+			global.built_machines[index] = nil
+		end
+	end
+	local built_assemblers = {}
+	for _, surface in pairs(game.surfaces) do
+		local assemblers = surface.find_entities_filtered{type = { "assembling-machine", "furnace" }}
+		for _, machine in pairs(assemblers) do
+			if not global.built_machines[machine.unit_number] then
+				global.built_machines[machine.unit_number] = {entity = machine, unit_number = machine.unit_number}
+			end
+			table.insert(built_assemblers, machine)
+		end
+	end
+	replace_machines(built_assemblers)
+end
 
 script.on_load(function()
 end)
@@ -133,31 +159,6 @@ required_items_for_levels = {
 
 update_machine_levels(true)
 
--- global iterators for surfaces
-local function copy_surfaces()
-	--surfaces have to be cached because next() does not work on custom-dict ( game.surfaces )
-	global.surfaces = {}
-	for k, v in pairs(game.surfaces) do
-		global.surfaces[k] = v
-	end
-	-- global.surfaces should never be empty because Nauvis cannot be deleted; Get first index of this table
-	global.current_surface_iter_index = next(global.surfaces, nil)
-end
-
-local function update_surface_iter_index()
-	--Inputting a nil value to next() will get the first table index.
-	--Occasionally next will return nil, and we want to skip nil indexes
-	if global.surfaces == nil then
-		copy_surfaces()
-	end
-
-	global.current_surface_iter_index = next(global.surfaces, global.current_surface_iter_index)
-
-	if global.current_surface_iter_index == nil then
-		global.current_surface_iter_index = next(global.surfaces, global.current_surface_iter_index)
-	end
-end
-
 function determine_level(finished_products_count)
 	local should_have_level = 1
 
@@ -171,6 +172,7 @@ function determine_level(finished_products_count)
 end
 
 function determine_machine(entity)
+	if settings.global["factory-levels-disable-mod"].value then return nil end
 	if entity == nil or not entity.valid or (entity.type ~= "assembling-machine" and entity.type ~= "furnace") then
 		return nil
 	end
@@ -231,7 +233,7 @@ function upgrade_factory(surface, targetname, sourceentity)
 	local fuel_inventory = get_inventory_contents(sourceentity.get_fuel_inventory())
 	local burnt_result_inventory = get_inventory_contents(sourceentity.get_burnt_result_inventory())
 	
-
+	global.built_machines[sourceentity.unit_number] = nil
 	if sourceentity.type == "assembling-machine" then
 		-- Recipe should survive, but why take that chance.
 		recipe = sourceentity.get_recipe()
@@ -247,6 +249,7 @@ function upgrade_factory(surface, targetname, sourceentity)
 											position = sourceentity.position,
 											force = sourceentity.force }
 
+	global.built_machines[created.unit_number] = {entity = created, unit_number = created.unit_number}
 	if item_requests then
 		surface.create_entity({ name = "item-request-proxy",
 								position = created.position,
@@ -280,20 +283,25 @@ function upgrade_factory(surface, targetname, sourceentity)
 	return created
 end
 
-function replace_machines(entities, surface)
+function replace_machines(entities)
 	for _, entity in pairs(entities) do
 		local should_have_level = determine_level(entity.products_finished)
 		for _, machine in pairs(machines) do
 			if (entity.name == machine.name and entity.products_finished > 0) then
-				upgrade_factory(surface, machine.level_name .. math.min(should_have_level, machine.max_level), entity)
+				if not settings.global["factory-levels-disable-mod"].value then
+					upgrade_factory(entity.surface, machine.level_name .. math.min(should_have_level, machine.max_level), entity)
+				end
 				break
 			elseif string_starts_with(entity.name, machine.level_name) then
 				local current_level = tonumber(string.match(entity.name, "%d+$"))
-				if (should_have_level > current_level and current_level < machine.max_level) then
-					upgrade_factory(surface, machine.level_name .. math.min(should_have_level, machine.max_level), entity)
+				if (settings.global["factory-levels-disable-mod"].value) then
+					upgrade_factory(entity.surface, machine.name, entity)
+					break
+				elseif (should_have_level > current_level and current_level < machine.max_level) then
+					upgrade_factory(entity.surface, machine.level_name .. math.min(should_have_level, machine.max_level), entity)
 					break
 				elseif (current_level == machine.max_level and machine.next_machine ~= nil) then
-					local created = upgrade_factory(surface, machine.next_machine, entity)
+					local created = upgrade_factory(entity.surface, machine.next_machine, entity)
 					created.products_finished = 0
 					break
 				end
@@ -303,46 +311,29 @@ function replace_machines(entities, surface)
 end
 
 script.on_nth_tick(6, function(event)
-
-	--If current iterator index is nil, then we start with the first surface.
-	if global.surfaces == nil then
-		copy_surfaces()
+	if global.current_machine == nil then
+		global.current_machine = next(global.built_machines, nil)
+		if global.current_machine == nil then return end
 	end
 
-	--The following if statement should only execute as true on the first pass
-	if global.surface_iterator == nil then
-		local curr_surface = global.surfaces[global.current_surface_iter_index]
-		global.surface_iterator = curr_surface.get_chunks()
-	end
-
-	-- iterate over chunks instead of all at once (abysmal performance on large maps or slow computers)
-	for i = 1, 10 do
-		-- if chunk_iterator() returns nil then move to next surface index.
-		local chunk = global.surface_iterator()
-		--surface iterator returns nil when it reaches the last chunk on the surface OR if the surface is deleted (tested in 0.17.54)
-		if chunk == nil then
-			--Each tick_freq the game will evaluate a cached surface; if invalid it will cycle global.current_surface_iter_index
-			update_surface_iter_index()
-			global.surface_iterator = global.surfaces[global.current_surface_iter_index].get_chunks()
+	local machines = {}
+	for i = 1, 100 do
+		global.current_machine = next(global.built_machines, global.current_machine)
+		if i == 1 and global.current_machine == nil then return end
+		if global.current_machine == nil then break end
+		entity = global.built_machines[global.current_machine].entity
+		if entity and entity.valid then
+			table.insert(machines, global.built_machines[global.current_machine].entity)
 		else
-			--include logic here to scan each surface @ chunk.
-			local surface = global.surfaces[global.current_surface_iter_index]
-
-			if surface == nil then
-				return
-			end
-
-			local area = { { chunk.x * 32 - 16, chunk.y * 32 - 16 }, { chunk.x * 32 + 16, chunk.y * 32 + 16 } }
-			local assemblers = surface.find_entities_filtered { type = { "assembling-machine", "furnace" }, area = area }
-			replace_machines(assemblers, surface)
-			-- debug
-			-- rendering.draw_rectangle { color = { r = 1, g = 0, b = 0, a = 0.5 }, left_top = { chunk.x * 32 - 16, chunk.y * 32 - 16 }, right_bottom = { chunk.x * 32 + 16, chunk.y * 32 + 16 }, filled = true, surface = surface, time_to_live = 60 }
+			global.built_machines[global.current_machine] = nil
 		end
 	end
+	replace_machines(machines)
 end)
 
 function on_mined_entity(event)
 	if (event.entity ~= nil and event.entity.products_finished ~= nil and event.entity.products_finished > 0) then
+		global.built_machines[event.entity.unit_number] = nil
 		if event.entity.type == "furnace" then
 			table.insert(global.stored_products_finished_furnaces, event.entity.products_finished)
 			table.sort(global.stored_products_finished_furnaces)
@@ -368,6 +359,7 @@ script.on_event(
 		  { filter = "type", type = "furnace" } })
 
 function replace_built_entity(entity, finished_product_count)
+	global.built_machines[entity.unit_number] = {entity = entity, unit_number = entity.unit_number}
 	local machine = determine_machine(entity)
 	if finished_product_count ~= nil then
 		local should_have_level = determine_level(finished_product_count)
@@ -400,18 +392,23 @@ function on_built_entity(event)
 end
 
 function on_runtime_mod_setting_changed(event)
-	update_machine_levels(true)
-	if required_items_for_levels[25] then
-		game.print("Crafts for Level 25: " .. required_items_for_levels[25])
-	end
-	if required_items_for_levels[50] then
-		game.print("Crafts for Level 50: " .. required_items_for_levels[50])
-	end
-	if required_items_for_levels[100] then
-		game.print("Crafts for Level 100: " .. required_items_for_levels[100])
-	end
-	if max_level ~= 100 then
-		game.print("Crafts for Max level of " .. max_level .. ": " .. required_items_for_levels[max_level])
+	if event.setting == "factory-levels-disable-mod" then
+		-- Refresh EVERY machine immediately.  User potentially wishes to remove this mod or some other mod that depends on this mod.
+		get_built_machines()
+	elseif event.setting == "factory-levels-exponent" then
+		update_machine_levels(true)
+		if required_items_for_levels[25] then
+			game.print("Crafts for Level 25: " .. required_items_for_levels[25])
+		end
+		if required_items_for_levels[50] then
+			game.print("Crafts for Level 50: " .. required_items_for_levels[50])
+		end
+		if required_items_for_levels[100] then
+			game.print("Crafts for Level 100: " .. required_items_for_levels[100])
+		end
+		if max_level ~= 100 then
+			game.print("Crafts for Max level of " .. max_level .. ": " .. required_items_for_levels[max_level])
+		end
 	end
 end
 

@@ -41,5 +41,12 @@ data:extend({
         minimum_value = 1.5, maximum_value = 5,
         setting_type = "runtime-global",
         default_value = 3
-    }
+    },
+	{
+		type = "bool-setting",
+		name = "factory-levels-disable-mod",
+		order = "f",
+		setting_type = "runtime-global",
+		default_value = false
+	}
 })
