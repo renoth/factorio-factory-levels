@@ -1,3 +1,5 @@
+require("util")
+
 script.on_init(function()
 	global.stored_products_finished_assemblers = { }
 	global.stored_products_finished_furnaces = { }
@@ -310,25 +312,29 @@ function replace_machines(entities)
 	end
 end
 
-script.on_nth_tick(6, function(event)
-	if global.current_machine == nil then
-		global.current_machine = next(global.built_machines, nil)
-		if global.current_machine == nil then return end
+function get_next_machine()		
+	if global.current_machine == nil or global.check_machines == nil then
+		global.check_machines = table.deepcopy(global.built_machines)
 	end
+	global.current_machine = next(global.check_machines, global.current_machine)
+end
 
-	local machines = {}
+script.on_nth_tick(6, function(event)
+	
+
+	local assemblers = {}
 	for i = 1, 100 do
-		global.current_machine = next(global.built_machines, global.current_machine)
+		get_next_machine()
 		if i == 1 and global.current_machine == nil then return end
 		if global.current_machine == nil then break end
 		entity = global.built_machines[global.current_machine].entity
 		if entity and entity.valid then
-			table.insert(machines, global.built_machines[global.current_machine].entity)
+			table.insert(assemblers, global.built_machines[global.current_machine].entity)
 		else
 			global.built_machines[global.current_machine] = nil
 		end
 	end
-	replace_machines(machines)
+	replace_machines(assemblers)
 end)
 
 function on_mined_entity(event)
