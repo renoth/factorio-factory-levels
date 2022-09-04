@@ -327,9 +327,9 @@ script.on_nth_tick(6, function(event)
 		get_next_machine()
 		if i == 1 and global.current_machine == nil then return end
 		if global.current_machine == nil then break end
-		entity = global.built_machines[global.current_machine].entity
-		if entity and entity.valid then
-			table.insert(assemblers, global.built_machines[global.current_machine].entity)
+		entity = global.check_machines[global.current_machine]
+		if entity and entity.entity and entity.entity.valid then
+			table.insert(assemblers, entity.entity)
 		else
 			global.built_machines[global.current_machine] = nil
 		end
