@@ -114,6 +114,8 @@ function factory_levels.create_leveled_machines(machines)
 				end
 				machine.minable.result = machines.base_machine_names[tier]
 				machine.placeable_by = { item = machines.base_machine_names[tier], count = 1 }
+				machine.localised_name = { "entity-name.factory-levels", {"entity-name." .. machines.base_machine_names[tier]}, level }
+				machine.localised_description = { "entity-description." .. machines.base_machine_names[tier] }
 			end
 			factory_levels.update_machine_speed(machine, level, machines.base_speeds[tier], machines.speed_multipliers[tier])
 			factory_levels.update_machine_energy_usage(machine, level, machines.base_consumption[tier], machines.consumption_multipliers[tier], machines.consumption_unit[tier])
@@ -155,7 +157,7 @@ function factory_levels.fix_productivity(machines)
 	for tier = 1, machines.tiers, 1 do
 		for level = 0, machines.levels[tier], 1 do
 			local machine = factory_levels.get_or_create_machine(machines.type, machines.base_machine_names[tier], level)
-			if machine.base_productivity == 0 then
+			if machine.base_productivity == 0 or machine.base_productivity == nil then
 				factory_levels.update_machine_productivity(machine, level, machines.base_productivity[tier], machines.productivity_multipliers[tier])
 			end
 		end
