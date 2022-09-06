@@ -20,10 +20,10 @@ function get_built_machines()
 	end
 	local built_assemblers = {}
 	for _, surface in pairs(game.surfaces) do
-		local assemblers = surface.find_entities_filtered{type = { "assembling-machine", "furnace" }}
+		local assemblers = surface.find_entities_filtered { type = { "assembling-machine", "furnace" } }
 		for _, machine in pairs(assemblers) do
 			if not global.built_machines[machine.unit_number] then
-				global.built_machines[machine.unit_number] = {entity = machine, unit_number = machine.unit_number}
+				global.built_machines[machine.unit_number] = { entity = machine, unit_number = machine.unit_number }
 			end
 			table.insert(built_assemblers, machine)
 		end
@@ -90,6 +90,85 @@ machines = {
 	["centrifuge"] = {
 		name = "centrifuge",
 		level_name = "centrifuge-level-",
+		max_level = 100
+	},
+
+	-- Angels Refining
+	["burner-ore-crusher"] = {
+		name = "burner-ore-crusher",
+		level_name = "burner-ore-crusher-level-",
+		max_level = 25,
+		next_machine = "ore-crusher"
+	},
+	["ore-crusher"] = {
+		name = "ore-crusher",
+		level_name = "ore-crusher-level-",
+		max_level = 25,
+		next_machine = "ore-crusher-2"
+	},
+	["ore-crusher-2"] = {
+		name = "ore-crusher-2",
+		level_name = "ore-crusher-2-level-",
+		max_level = 50,
+		next_machine = "ore-crusher-3"
+	},
+	["ore-crusher-3"] = {
+		name = "ore-crusher-3",
+		level_name = "ore-crusher-3-level-",
+		max_level = 100
+	},
+	["liquifier"] = {
+		name = "liquifier",
+		level_name = "liquifier-level-",
+		max_level = 25,
+		next_machine = "ore-crusher"
+	},
+	["liquifier-2"] = {
+		name = "liquifier-2",
+		level_name = "liquifier-2-level-",
+		max_level = 25,
+		next_machine = "ore-crusher-2"
+	},
+	["liquifier-3"] = {
+		name = "liquifier-3",
+		level_name = "liquifier-3-level-",
+		max_level = 50,
+		next_machine = "ore-crusher-3"
+	},
+	["liquifier-4"] = {
+		name = "liquifier-4",
+		level_name = "liquifier-4-level-",
+		max_level = 100
+	},
+	["crystallizer"] = {
+		name = "crystallizer",
+		level_name = "crystallizer-level-",
+		max_level = 50,
+		next_machine = "crystallizer-2"
+	},
+	["crystallizer-2"] = {
+		name = "crystallizer-2",
+		level_name = "crystallizer-2-level-",
+		max_level = 100
+	},
+	["angels-electrolyser"] = {
+		name = "angels-electrolyser",
+		level_name = "angels-electrolyser-level-",
+		max_level = 25
+	},
+	["angels-electrolyser-2"] = {
+		name = "angels-electrolyser-2",
+		level_name = "angels-electrolyser-2-level-",
+		max_level = 25
+	},
+	["angels-electrolyser-3"] = {
+		name = "angels-electrolyser-3",
+		level_name = "angels-electrolyser-3-level-",
+		max_level = 25
+	},
+	["angels-electrolyser-4"] = {
+		name = "angels-electrolyser-4",
+		level_name = "angels-electrolyser-4-level-",
 		max_level = 100
 	}
 }
@@ -174,7 +253,9 @@ function determine_level(finished_products_count)
 end
 
 function determine_machine(entity)
-	if settings.global["factory-levels-disable-mod"].value then return nil end
+	if settings.global["factory-levels-disable-mod"].value then
+		return nil
+	end
 	if entity == nil or not entity.valid or (entity.type ~= "assembling-machine" and entity.type ~= "furnace") then
 		return nil
 	end
@@ -191,10 +272,10 @@ function get_inventory_contents(inventory)
 	if inventory == nil then
 		return inventory_results
 	end
-	
+
 	inventory_contents = inventory.get_contents()
 	for name, count in pairs(inventory_contents) do
-		table.insert(inventory_results, {name=name, count=count})
+		table.insert(inventory_results, { name = name, count = count })
 	end
 	return inventory_results
 end
@@ -222,7 +303,7 @@ function upgrade_factory(surface, targetname, sourceentity)
 			item_requests[module_name] = count
 		end
 	end
-	
+
 	-- For unknown reasons, Factorio is voiding ALL of the inventories of the machine.
 	local input_inventory = {}
 	if sourceentity.type == "assembling-machine" then
@@ -234,7 +315,7 @@ function upgrade_factory(surface, targetname, sourceentity)
 	local module_inventory = get_inventory_contents(sourceentity.get_module_inventory())
 	local fuel_inventory = get_inventory_contents(sourceentity.get_fuel_inventory())
 	local burnt_result_inventory = get_inventory_contents(sourceentity.get_burnt_result_inventory())
-	
+
 	global.built_machines[sourceentity.unit_number] = nil
 	if sourceentity.type == "assembling-machine" then
 		-- Recipe should survive, but why take that chance.
@@ -251,7 +332,7 @@ function upgrade_factory(surface, targetname, sourceentity)
 											position = sourceentity.position,
 											force = sourceentity.force }
 
-	global.built_machines[created.unit_number] = {entity = created, unit_number = created.unit_number}
+	global.built_machines[created.unit_number] = { entity = created, unit_number = created.unit_number }
 	if item_requests then
 		surface.create_entity({ name = "item-request-proxy",
 								position = created.position,
@@ -266,7 +347,7 @@ function upgrade_factory(surface, targetname, sourceentity)
 	if created.type == "assembling-machine" and recipe ~= nil then
 		created.set_recipe(recipe)
 	end
-	
+
 	if created.type == "assembling-machine" then
 		insert_inventory_contents(created.get_inventory(defines.inventory.assembling_machine_input), input_inventory)
 	elseif created.type == "furnace" then
@@ -312,7 +393,7 @@ function replace_machines(entities)
 	end
 end
 
-function get_next_machine()		
+function get_next_machine()
 	if global.current_machine == nil or global.check_machines == nil then
 		global.check_machines = table.deepcopy(global.built_machines)
 	end
@@ -320,13 +401,17 @@ function get_next_machine()
 end
 
 script.on_nth_tick(6, function(event)
-	
+
 
 	local assemblers = {}
 	for i = 1, 100 do
 		get_next_machine()
-		if i == 1 and global.current_machine == nil then return end
-		if global.current_machine == nil then break end
+		if i == 1 and global.current_machine == nil then
+			return
+		end
+		if global.current_machine == nil then
+			break
+		end
 		entity = global.check_machines[global.current_machine]
 		if entity and entity.entity and entity.entity.valid then
 			table.insert(assemblers, entity.entity)
@@ -365,7 +450,7 @@ script.on_event(
 		  { filter = "type", type = "furnace" } })
 
 function replace_built_entity(entity, finished_product_count)
-	global.built_machines[entity.unit_number] = {entity = entity, unit_number = entity.unit_number}
+	global.built_machines[entity.unit_number] = { entity = entity, unit_number = entity.unit_number }
 	local machine = determine_machine(entity)
 	if finished_product_count ~= nil then
 		local should_have_level = determine_level(finished_product_count)
@@ -432,4 +517,4 @@ script.on_event(
 
 script.on_event(
 		defines.events.on_runtime_mod_setting_changed,
-		on_runtime_mod_setting_changed)		
+		on_runtime_mod_setting_changed)
