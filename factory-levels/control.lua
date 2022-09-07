@@ -302,6 +302,9 @@ function upgrade_factory(surface, targetname, sourceentity)
 		for module_name, count in pairs(existing_requests.item_requests) do
 			item_requests[module_name] = count
 		end
+		if next(item_requests, nil) == nil then
+			item_requests = nil
+		end
 	end
 
 	-- For unknown reasons, Factorio is voiding ALL of the inventories of the machine.

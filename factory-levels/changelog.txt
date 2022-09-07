@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.6.7
+Date: 2022-09-07
+  Bugfix:
+    - Thanks to CaitSith2: Fixed a crash when copy/pasting a leveled machine with modules in editor mode with instant blueprinting turned on.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.6
+Date: 2022-09-06
+  Features:
+    - Added support for Angel's Refining and Angel's Petrochemical Processing
+---------------------------------------------------------------------------------------------------
 Version: 0.6.5
 Date: 2022-09-05
   Changes:
@@ -31,7 +41,7 @@ Version: 0.6.1
 Date: 2022-08-23
   Bugfix:
     - Thanks to CaitSith2: Inputs and outputs no longer voided on level up.
-    - Thanks to CaitSith2: (can't think of the term), something something SE Productivity
+    - Thanks to CaitSith2: Fixed regression of SE machine level productivity.
 ---------------------------------------------------------------------------------------------------
 Version: 0.6.0
 Date: 2022-08-15
