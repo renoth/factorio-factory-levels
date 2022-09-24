@@ -15,7 +15,7 @@ function get_built_machines()
 	for unit_number, machine in pairs(global.built_machines) do
 		-- Remove invalid machines from the global table.
 		if not machine.entity or not machine.entity.valid then
-			global.built_machines[index] = nil
+			global.built_machines[unit_number] = nil
 		end
 	end
 	local built_assemblers = {}
