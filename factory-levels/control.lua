@@ -186,7 +186,7 @@ function update_machine_levels(overwrite)
 			end
 		end
 	end
-	for i = 1, max_level, 1 do
+	for i = 1, (max_level + 1), 1 do -- Adding one more level for machine upgrade to next tier.
 		if required_items_for_levels[i] == nil then
 			table.insert(required_items_for_levels, math.floor(1 + math.pow(i, exponent)))
 		end
@@ -389,7 +389,7 @@ function replace_machines(entities)
 				elseif (should_have_level > current_level and current_level < machine.max_level) then
 					upgrade_factory(entity.surface, machine.level_name .. math.min(should_have_level, machine.max_level), entity)
 					break
-				elseif (current_level == machine.max_level and machine.next_machine ~= nil) then
+				elseif (should_have_level > current_level and current_level >= machine.max_level and machine.next_machine ~= nil) then
 					local created = upgrade_factory(entity.surface, machine.next_machine, entity)
 					created.products_finished = 0
 					break
