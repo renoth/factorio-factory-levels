@@ -15,7 +15,7 @@ function get_built_machines()
 	for unit_number, machine in pairs(global.built_machines) do
 		-- Remove invalid machines from the global table.
 		if not machine.entity or not machine.entity.valid then
-			global.built_machines[index] = nil
+			global.built_machines[unit_number] = nil
 		end
 	end
 	local built_assemblers = {}
@@ -186,7 +186,7 @@ function update_machine_levels(overwrite)
 			end
 		end
 	end
-	for i = 1, max_level, 1 do
+	for i = 1, (max_level + 1), 1 do -- Adding one more level for machine upgrade to next tier.
 		if required_items_for_levels[i] == nil then
 			table.insert(required_items_for_levels, math.floor(1 + math.pow(i, exponent)))
 		end
@@ -213,6 +213,7 @@ remote.add_interface("factory_levels", {
 			machines[machine.name].level_name = machine.level_name or machines[machine.name].level_name
 			machines[machine.name].max_level = machine.max_level or machines[machine.name].max_level
 			machines[machine.name].next_machine = machine.next_machine or machines[machine.name].next_machine
+			machines[machine.name].disable_mod_setting = machine.disable_mod_setting or machines[machine.name].disable_mod_setting
 			if machines[machine.name].max_level > max_level then
 				max_level = machines[machine.name].max_level
 				update_machine_levels()
@@ -375,18 +376,20 @@ function replace_machines(entities)
 		for _, machine in pairs(machines) do
 			if (entity.name == machine.name and entity.products_finished > 0) then
 				if not settings.global["factory-levels-disable-mod"].value then
-					upgrade_factory(entity.surface, machine.level_name .. math.min(should_have_level, machine.max_level), entity)
+					if not machine.disable_mod_setting or not settings.global[machine.disable_mod_setting].value then
+						upgrade_factory(entity.surface, machine.level_name .. math.min(should_have_level, machine.max_level), entity)
+					end
 				end
 				break
 			elseif string_starts_with(entity.name, machine.level_name) then
 				local current_level = tonumber(string.match(entity.name, "%d+$"))
-				if (settings.global["factory-levels-disable-mod"].value) then
+				if (settings.global["factory-levels-disable-mod"].value) or (machine.disable_mod_setting and settings.global[machine.disable_mod_setting].value) then
 					upgrade_factory(entity.surface, machine.name, entity)
 					break
 				elseif (should_have_level > current_level and current_level < machine.max_level) then
 					upgrade_factory(entity.surface, machine.level_name .. math.min(should_have_level, machine.max_level), entity)
 					break
-				elseif (current_level == machine.max_level and machine.next_machine ~= nil) then
+				elseif (should_have_level > current_level and current_level >= machine.max_level and machine.next_machine ~= nil) then
 					local created = upgrade_factory(entity.surface, machine.next_machine, entity)
 					created.products_finished = 0
 					break
