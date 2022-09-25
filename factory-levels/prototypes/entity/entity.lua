@@ -181,6 +181,31 @@ if mods["angelspetrochem"] then
 	factory_levels.create_leveled_machines(electrolyzer_levels)
 end
 
+if mods["angelsbioprocessing"] then
+	algaefarm_levels = {
+		type = "assembling-machine",
+		tiers = 4,
+		base_machine_names = { "algae-farm", "algae-farm-2", "algae-farm-3", "algae-farm-4" },
+		base_level_tints = { { r = 1, g = 1, b = 1 }, { r = 1, g = 1, b = 1 }, { r = 1, g = 1, b = 1 }, { r = 1, g = 1, b = 1 } },
+		level_tint_multipliers = { { r = 0, g = 0, b = -0.02 }, { r = 0, g = 0, b = -0.02 }, { r = 0, g = -0.015, b = -0.015 }, { r = -0.009, g = 0, b = 0 } },
+		levels = { 25, 25, 25, 100 },
+		base_speeds = { 0.5, 1, 1.5, 2 },
+		speed_multipliers = { 0.02, 0.02, 0.02, 0.03 },
+		base_consumption = { 100, 125, 150, 175 },
+		consumption_multipliers = { 1, 1, 1, 1 },
+		consumption_unit = { "kW", "kW", "kW", "kW" },
+		base_pollution = { -10, -20, -30, -40 },
+		pollution_multipliers = { -0.1, -0.1, -0.1, -0.2 },
+		base_productivity = { 0, 0, 0, 0 },
+		productivity_multipliers = { 0.002, 0.002, 0.002, 0.002 },
+		levels_per_module_slots = { 25, 25, 25, 25 },
+		base_module_slots = { 2, 2, 2, 2 },
+		bonus_module_slots = { 0, 0, 0, 1 }
+	}
+
+	factory_levels.create_leveled_machines(algaefarm_levels)
+end
+
 if mods["angelsrefining"] then
 	ore_crusher_levels = {
 		type = "assembling-machine",

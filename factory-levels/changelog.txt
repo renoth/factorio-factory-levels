@@ -4,6 +4,7 @@ Date: 2022-09-24
   Changes:
     - Thanks to CaitSith2: mods via remote interface can now declare they wish to be disabled.
     - Thanks to CaitSith2: machines no longer instantly level up to the next tier the moment they hit max level of current tier.
+    - Added support for Algae Farm from Angels Bioprocessing
   Bugfix:
     - Thanks to CaitSith2: fixed a bug with on_configuration_changed. (this event fires on updating any mods, or installing/removing any mods.)
 ---------------------------------------------------------------------------------------------------

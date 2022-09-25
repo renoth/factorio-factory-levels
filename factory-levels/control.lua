@@ -170,6 +170,26 @@ machines = {
 		name = "angels-electrolyser-4",
 		level_name = "angels-electrolyser-4-level-",
 		max_level = 100
+	},
+	["algae-farm"] = {
+		name = "algae-farm",
+		level_name = "algae-farm-level-",
+		max_level = 25
+	},
+	["algae-farm-2"] = {
+		name = "algae-farm-2",
+		level_name = "algae-farm-2-level-",
+		max_level = 25
+	},
+	["algae-farm-3"] = {
+		name = "algae-farm-3",
+		level_name = "algae-farm-3-level-",
+		max_level = 25
+	},
+	["algae-farm-4"] = {
+		name = "algae-farm-4",
+		level_name = "algae-farm-4-level-",
+		max_level = 100
 	}
 }
 
