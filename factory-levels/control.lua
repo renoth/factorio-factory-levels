@@ -526,6 +526,16 @@ function on_runtime_mod_setting_changed(event)
 		if max_level ~= 100 then
 			game.print("Crafts for Max level of " .. max_level .. ": " .. required_items_for_levels[max_level])
 		end
+	else
+		update_machines = false
+		for machine_name, machine in pairs(machines) do
+			if event.setting == machine.disable_mod_setting then
+				update_machines = true
+			end
+		end
+		if update_machines then
+			get_built_machines()
+		end
 	end
 end
 
