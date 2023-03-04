@@ -3,6 +3,7 @@ Version: 0.6.9
 Date: 2022-09-27
   Bugfix:
     - Thanks to CaitSith2: Actually look for the external disable-mod-setting within on_runtime_mod_setting_changed.
+    - Fix next level for liquifier
 ---------------------------------------------------------------------------------------------------
 Version: 0.6.8
 Date: 2022-09-24

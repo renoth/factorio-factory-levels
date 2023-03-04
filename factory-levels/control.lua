@@ -121,19 +121,19 @@ machines = {
 		name = "liquifier",
 		level_name = "liquifier-level-",
 		max_level = 25,
-		next_machine = "ore-crusher"
+		next_machine = "liquifier-level-2"
 	},
 	["liquifier-2"] = {
 		name = "liquifier-2",
 		level_name = "liquifier-2-level-",
 		max_level = 25,
-		next_machine = "ore-crusher-2"
+		next_machine = "liquifier-level-3"
 	},
 	["liquifier-3"] = {
 		name = "liquifier-3",
 		level_name = "liquifier-3-level-",
 		max_level = 50,
-		next_machine = "ore-crusher-3"
+		next_machine = "liquifier-level-4"
 	},
 	["liquifier-4"] = {
 		name = "liquifier-4",
