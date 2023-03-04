@@ -8,7 +8,7 @@ This is the mod for you.
  
  With maven installed issue the following command:
  
- `mvn assembly:assembly install`
+ `mvn assembly:single install`
  
  The target folder should now contain the mod zip file. All zipfiles from the target-folder will get copied to the configured factorio mod folder.
  

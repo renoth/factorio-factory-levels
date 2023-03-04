@@ -17,7 +17,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
+                <version>3.3.0</version>
                 <configuration>
                     <classesDirectory>src</classesDirectory>
                     <excludes>
@@ -28,7 +28,7 @@
 
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.5.3</version>
+                <version>3.5.0</version>
                 <configuration>
                     <finalName>factory-levels_${project.version}</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
@@ -41,7 +41,7 @@
 
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.7</version>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <id>copy-resource-one</id>
@@ -68,7 +68,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>properties-maven-plugin</artifactId>
-                <version>1.0.0</version>
+                <version>1.1.0</version>
                 <executions>
                     <execution>
                         <phase>initialize</phase>
