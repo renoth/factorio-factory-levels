@@ -93,6 +93,13 @@ machines = {
 		max_level = 100
 	},
 
+	-- Simple Air Cleaner
+	["air-cleaner"] = {
+		name = "air-cleaner",
+		level_name = "air-cleaner-level-",
+		max_level = 100
+	},
+
 	-- Angels Refining
 	["burner-ore-crusher"] = {
 		name = "burner-ore-crusher",

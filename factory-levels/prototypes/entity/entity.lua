@@ -181,6 +181,31 @@ if mods["angelspetrochem"] then
 	factory_levels.create_leveled_machines(electrolyzer_levels)
 end
 
+if mods["simple-air-cleaner"] then
+	air_cleaner_levels = {
+		type = "furnace",
+		tiers = 1,
+		base_machine_names = { "air-cleaner" },
+		base_level_tints = { { r = 1, g = 1, b = 1 } },
+		level_tint_multipliers = { { r = 0, g = 0, b = -0.02 } },
+		levels = { 100 },
+		base_speeds = { 1 },
+		speed_multipliers = { 0.02 },
+		base_consumption = { 150 },
+		consumption_multipliers = { 1 },
+		consumption_unit = { "kW" },
+		base_pollution = { -96 },
+		pollution_multipliers = { 0.1 },
+		base_productivity = { 0 },
+		productivity_multipliers = { 0 },
+		levels_per_module_slots = { 100 },
+		base_module_slots = { 0 },
+		bonus_module_slots = { 1 }
+	}
+
+	factory_levels.create_leveled_machines(air_cleaner_levels)
+end
+
 if mods["angelsbioprocessing"] then
 	algaefarm_levels = {
 		type = "assembling-machine",
@@ -274,4 +299,3 @@ if mods["angelsrefining"] then
 	factory_levels.create_leveled_machines(liquifier_levels)
 	factory_levels.create_leveled_machines(crystallizer_levels)
 end
-
