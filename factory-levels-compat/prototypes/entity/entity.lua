@@ -187,7 +187,7 @@ if mods["simple-air-cleaner"] then
 		tiers = 1,
 		base_machine_names = { "air-cleaner" },
 		base_level_tints = { { r = 1, g = 1, b = 1 } },
-		level_tint_multipliers = { { r = 0, g = 0, b = 0.02 } },
+		level_tint_multipliers = { { r = 0, g = 0, b = 0 } },
 		levels = { 100 },
 		base_speeds = { 1 },
 		speed_multipliers = { 0.02 },
