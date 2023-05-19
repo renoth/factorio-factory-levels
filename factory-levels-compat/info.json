@@ -3,12 +3,12 @@
   "title": "Factory Levels (Compatibility)",
   "version": "0.1.069.1118",
   "author": "Dagothra",
-  "homepage": "https://github.com/renoth/factorio-factory-levels",
-  "description": "Factories can level up by producing items. Forked for miner tweaks and compatibility with other mods I use.",
+  "homepage": "https://github.com/Gwynnevere/factorio-factory-levels",
+  "description": "Factories can level up by producing items. Forked for miner tweaks and compatibility with other mods I use. DO NOT USE THIS MOD",
   "factorio_version": "1.1",
   "dependencies": [
     "base >= 1.1",
-    "(?) space-exploration"
+    "(?) space-exploration",
     "(?) angelsrefining",
     "(?) angelsbioprocessing",
     "(?) reverse-factory",
