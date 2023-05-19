@@ -1,15 +1,18 @@
 {
   "name": "factory-levels",
-  "title": "Factory Levels",
-  "version": "0.6.9",
-  "author": "sensenmann",
+  "title": "Factory Levels (Compatibility)",
+  "version": "0.1.069.1118",
+  "author": "Dagothra",
   "homepage": "https://github.com/renoth/factorio-factory-levels",
-  "description": "Factories can level up by producing items",
+  "description": "Factories can level up by producing items. Forked for miner tweaks and compatibility with other mods I use.",
   "factorio_version": "1.1",
   "dependencies": [
     "base >= 1.1",
-    "(?) space-exploration-postprocess",
+    "(?) space-exploration"
     "(?) angelsrefining",
-    "(?) angelsbioprocessing"
+    "(?) angelsbioprocessing",
+    "(?) reverse-factory",
+    "(?) aai-industry",
+    "(?) simple-air-cleaner"
   ]
 }
