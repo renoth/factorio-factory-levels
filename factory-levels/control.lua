@@ -76,6 +76,37 @@ machines = {
 		max_level = 100
 	},
 
+	-- Electric Furnaces
+
+	["electric-stone-furnace"] = {
+		name = "electric-stone-furnace",
+		level_name = "electric-stone-furnace-level-",
+		max_level = 25,
+		next_machine = "electric-steel-furnace"
+	},
+	["electric-steel-furnace"] = {
+		name = "electric-steel-furnace",
+		level_name = "electric-steel-furnace-level-",
+		max_level = 100
+	},
+	["electric-furnace"] = {
+		name = "electric-furnace",
+		level_name = "electric-furnace-level-",
+		max_level = 100,
+		next_machine = "electric-furnace-2"
+	},
+	["electric-furnace-2"] = {
+		name = "electric-furnace-2",
+		level_name = "electric-furnace-2-level-",
+		max_level = 100,
+		next_machine = "electric-furnace-3"
+	},
+	["electric-furnace-3"] = {
+		name = "electric-furnace-3",
+		level_name = "electric-furnace-3-level-",
+		max_level = 100
+	},
+
 	-- refining
 	["chemical-plant"] = {
 		name = "chemical-plant",
@@ -91,6 +122,18 @@ machines = {
 		name = "centrifuge",
 		level_name = "centrifuge-level-",
 		max_level = 100
+	},
+
+	-- Omnimatter
+	["burner-omnitractor"] = {
+		name = "burner-omnitractor",
+		level_name = "burner-omnitractor-level-",
+		max_level = 10
+	},
+	["omnitractor-1"] = {
+		name = "omnitractor-1",
+		level_name = "omnitractor-1-level-",
+		max_level = 25
 	},
 
 	-- Angels Refining
@@ -206,7 +249,8 @@ function update_machine_levels(overwrite)
 			end
 		end
 	end
-	for i = 1, (max_level + 1), 1 do -- Adding one more level for machine upgrade to next tier.
+	for i = 1, (max_level + 1), 1 do
+		-- Adding one more level for machine upgrade to next tier.
 		if required_items_for_levels[i] == nil then
 			table.insert(required_items_for_levels, math.floor(1 + math.pow(i, exponent)))
 		end

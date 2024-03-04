@@ -88,6 +88,7 @@ function factory_levels.get_or_create_machine(machine_type, base_machine_name, l
 	end
 
 	if base_machine == nil then
+		log("base machine is nil " .. base_machine_name)
 		return nil
 	end
 

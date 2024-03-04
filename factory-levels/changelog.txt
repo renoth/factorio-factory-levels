@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.6.10
+Date: 2024-03-03
+  Changes:
+    - Add first omnimatter support (burner-omnitractor, omnitractor-1)
+    - Add support for electric furnaces
+---------------------------------------------------------------------------------------------------
 Version: 0.6.9
 Date: 2022-09-27
   Bugfix:
