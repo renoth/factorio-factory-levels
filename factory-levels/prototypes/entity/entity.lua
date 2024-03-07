@@ -128,23 +128,26 @@ burner_furnace_levels = {
 
 electric_furnace_levels = {
 	type = "furnace",
-	tiers = 1,
-	base_machine_names = { "electric-furnace" },
-	base_level_tints = { { r = 1, g = 1, b = 1 } },
-	level_tint_multipliers = { { r = 0, g = -0.008, b = -0.008 } },
-	levels = { 100 },
-	base_speeds = { 2 },
-	speed_multipliers = { 0.04 },
-	base_consumption = { 180 },
-	consumption_multipliers = { 2.8 },
-	consumption_unit = { "kW" },
-	base_pollution = { 1 },
-	pollution_multipliers = { 0.12 },
-	base_productivity = { 0 },
-	productivity_multipliers = { 0.002 },
-	levels_per_module_slots = { 25 },
-	base_module_slots = { 2 },
-	bonus_module_slots = { 1 }
+	tiers = 3,
+	base_machine_names = { "electric-furnace", "electric-furnace-2", "electric-furnace-3" },
+	base_level_tints = { { r = 1, g = 1, b = 1 }, { r = 1, g = 1, b = 1 }, { r = 1, g = 1, b = 1 } },
+	level_tint_multipliers = {
+		{ r = -0.02, g = -0.02, b = 0 },
+		{ r = 0, g = 0, b = -0.016 },
+		{ r = 0, g = -0.008, b = -0.008 } },
+	levels = { 25, 50, 100 },
+	base_speeds = { 2, 3, 4 },
+	speed_multipliers = { 0.04, 0.02, 0.01 },
+	base_consumption = { 180, 180, 240 },
+	consumption_multipliers = { 0, 1, 2 },
+	consumption_unit = { "kW", "kW", "kW" },
+	base_pollution = { 1, 1.2, 1.5 },
+	pollution_multipliers = { 0.01, 0.01, 0.02 },
+	base_productivity = { 0, 0, 0 },
+	productivity_multipliers = { 0.002, 0.002, 0.002 },
+	levels_per_module_slots = { 25, 22, 33 },
+	base_module_slots = { 2, 2, 4 },
+	bonus_module_slots = { 0, 2, 3 }
 }
 
 if mods["space-exploration"] then
