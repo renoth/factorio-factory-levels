@@ -89,16 +89,10 @@ machines = {
 		level_name = "electric-steel-furnace-level-",
 		max_level = 100
 	},
-	["electric-furnace"] = {
-		name = "electric-furnace",
-		level_name = "electric-furnace-level-",
-		max_level = 100,
-		next_machine = "electric-furnace-2"
-	},
 	["electric-furnace-2"] = {
 		name = "electric-furnace-2",
 		level_name = "electric-furnace-2-level-",
-		max_level = 100,
+		max_level = 50,
 		next_machine = "electric-furnace-3"
 	},
 	["electric-furnace-3"] = {

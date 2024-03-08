@@ -3,7 +3,7 @@ if mods["omnimatter"] then
 
 	omnimatter_crusher_levels = {
 		type = "assembling-machine",
-		tiers = 1,
+		tiers = 2,
 		base_machine_names = { "burner-omnitractor", "omnitractor-1" },
 		base_level_tints = {
 			{ r = 1, g = 1, b = 1 },
