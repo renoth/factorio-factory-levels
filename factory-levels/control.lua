@@ -1,8 +1,8 @@
 require("util")
 
 script.on_init(function()
-	global.stored_products_finished_assemblers = { }
-	global.stored_products_finished_furnaces = { }
+	storage.stored_products_finished_assemblers = { }
+	storage.stored_products_finished_furnaces = { }
 	get_built_machines()
 end)
 
@@ -11,19 +11,19 @@ script.on_configuration_changed(function()
 end)
 
 function get_built_machines()
-	global.built_machines = global.built_machines or {}
-	for unit_number, machine in pairs(global.built_machines) do
-		-- Remove invalid machines from the global table.
+	storage.built_machines = storage.built_machines or {}
+	for unit_number, machine in pairs(storage.built_machines) do
+		-- Remove invalid machines from the storage table.
 		if not machine.entity or not machine.entity.valid then
-			global.built_machines[unit_number] = nil
+			storage.built_machines[unit_number] = nil
 		end
 	end
 	local built_assemblers = {}
 	for _, surface in pairs(game.surfaces) do
 		local assemblers = surface.find_entities_filtered { type = { "assembling-machine", "furnace" } }
 		for _, machine in pairs(assemblers) do
-			if not global.built_machines[machine.unit_number] then
-				global.built_machines[machine.unit_number] = { entity = machine, unit_number = machine.unit_number }
+			if not storage.built_machines[machine.unit_number] then
+				storage.built_machines[machine.unit_number] = { entity = machine, unit_number = machine.unit_number }
 			end
 			table.insert(built_assemblers, machine)
 		end
@@ -378,7 +378,7 @@ function upgrade_factory(surface, targetname, sourceentity)
 	local fuel_inventory = get_inventory_contents(sourceentity.get_fuel_inventory())
 	local burnt_result_inventory = get_inventory_contents(sourceentity.get_burnt_result_inventory())
 
-	global.built_machines[sourceentity.unit_number] = nil
+	storage.built_machines[sourceentity.unit_number] = nil
 	if sourceentity.type == "assembling-machine" then
 		-- Recipe should survive, but why take that chance.
 		recipe = sourceentity.get_recipe()
@@ -394,7 +394,7 @@ function upgrade_factory(surface, targetname, sourceentity)
 											position = sourceentity.position,
 											force = sourceentity.force }
 
-	global.built_machines[created.unit_number] = { entity = created, unit_number = created.unit_number }
+	storage.built_machines[created.unit_number] = { entity = created, unit_number = created.unit_number }
 	if item_requests then
 		surface.create_entity({ name = "item-request-proxy",
 								position = created.position,
@@ -458,45 +458,46 @@ function replace_machines(entities)
 end
 
 function get_next_machine()
-	if global.current_machine == nil or global.check_machines == nil then
-		global.check_machines = table.deepcopy(global.built_machines)
+	if storage.current_machine == nil or storage.check_machines == nil then
+		storage.check_machines = table.deepcopy(storage.built_machines)
 	end
-	global.current_machine = next(global.check_machines, global.current_machine)
+	storage.current_machine = next(storage.check_machines, storage.current_machine)
 end
 
 script.on_nth_tick(6, function(event)
-
-
 	local assemblers = {}
+
 	for i = 1, 100 do
 		get_next_machine()
-		if i == 1 and global.current_machine == nil then
+		if i == 1 and storage.current_machine == nil then
 			return
 		end
-		if global.current_machine == nil then
+		if storage.current_machine == nil then
 			break
 		end
-		entity = global.check_machines[global.current_machine]
+		entity = storage.check_machines[storage.current_machine]
+
 		if entity and entity.entity and entity.entity.valid then
 			table.insert(assemblers, entity.entity)
 		else
-			global.built_machines[global.current_machine] = nil
+			storage.built_machines[storage.current_machine] = nil
 		end
 	end
+
 	replace_machines(assemblers)
 end)
 
 function on_mined_entity(event)
 	if (event.entity ~= nil and event.entity.products_finished ~= nil and event.entity.products_finished > 0) then
-		global.built_machines[event.entity.unit_number] = nil
+		storage.built_machines[event.entity.unit_number] = nil
 		if event.entity.type == "furnace" then
-			table.insert(global.stored_products_finished_furnaces, event.entity.products_finished)
-			table.sort(global.stored_products_finished_furnaces)
+			table.insert(storage.stored_products_finished_furnaces, event.entity.products_finished)
+			table.sort(storage.stored_products_finished_furnaces)
 		end
 
 		if event.entity.type == "assembling-machine" then
-			table.insert(global.stored_products_finished_assemblers, event.entity.products_finished)
-			table.sort(global.stored_products_finished_assemblers)
+			table.insert(storage.stored_products_finished_assemblers, event.entity.products_finished)
+			table.sort(storage.stored_products_finished_assemblers)
 		end
 	end
 end
@@ -514,13 +515,12 @@ script.on_event(
 		  { filter = "type", type = "furnace" } })
 
 function replace_built_entity(entity, finished_product_count)
-	global.built_machines[entity.unit_number] = { entity = entity, unit_number = entity.unit_number }
+	storage.built_machines[entity.unit_number] = { entity = entity, unit_number = entity.unit_number }
 	local machine = determine_machine(entity)
 	if finished_product_count ~= nil then
 		local should_have_level = determine_level(finished_product_count)
 		entity.products_finished = finished_product_count
 
-		local created_entity_name = entity.name
 		if machine ~= nil then
 			local created = upgrade_factory(entity.surface, machine.level_name .. math.min(should_have_level, machine.max_level), entity)
 			created.products_finished = finished_product_count
@@ -533,15 +533,15 @@ function replace_built_entity(entity, finished_product_count)
 end
 
 function on_built_entity(event)
-	if (event.created_entity ~= nil and event.created_entity.type == "assembling-machine") then
-		local finished_product_count = table.remove(global.stored_products_finished_assemblers)
-		replace_built_entity(event.created_entity, finished_product_count)
+	if (event.entity ~= nil and event.entity.type == "assembling-machine") then
+		local finished_product_count = table.remove(storage.stored_products_finished_assemblers)
+		replace_built_entity(event.entity, finished_product_count)
 		return
 	end
 
-	if (event.created_entity ~= nil and event.created_entity.type == "furnace") then
-		local finished_product_count = table.remove(global.stored_products_finished_furnaces)
-		replace_built_entity(event.created_entity, finished_product_count)
+	if (event.entity ~= nil and event.entity.type == "furnace") then
+		local finished_product_count = table.remove(storage.stored_products_finished_furnaces)
+		replace_built_entity(event.entity, finished_product_count)
 		return
 	end
 end

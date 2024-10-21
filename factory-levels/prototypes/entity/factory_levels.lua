@@ -14,7 +14,7 @@ end
 
 function factory_levels.update_machine_pollution(machine, level, base_emission, emission_multiplier)
 	if (settings.startup["factory-levels-enable-emissions"].value) then
-		machine.energy_source.emissions_per_minute = base_emission + emission_multiplier * level
+		machine.energy_source.emissions_per_minute.pollution = base_emission + emission_multiplier * level
 	end
 end
 
@@ -118,23 +118,9 @@ function factory_levels.create_leveled_machines(machines)
 			local machine = factory_levels.get_or_create_machine(machines.type, machines.base_machine_names[tier], level)
 
 			if level > 0 then
-				machine.flags = machine.flags or { "placeable-neutral", "placeable-player", "player-creation" }
-				local hidden = false
-
-				for _, flag in pairs(machine.flags) do
-					if flag == "hidden" then
-						hidden = true
-						break
-					end
-				end
-
-				if not hidden then
-					table.insert(machine.flags, "hidden")
-				end
-
 				machine.minable.result = machines.base_machine_names[tier]
 				machine.placeable_by = { item = machines.base_machine_names[tier], count = 1 }
-				machine.localised_name = { "entity-name.factory-levels", { "entity-name." .. machines.base_machine_names[tier] }, level }
+				machine.localised_name = { "entity-name.factory-levels", { "entity-name." .. machines.base_machine_names[tier] }, level .. "" }
 				machine.localised_description = { "entity-description." .. machines.base_machine_names[tier] }
 			end
 
