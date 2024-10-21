@@ -6,6 +6,10 @@ function factory_levels.update_machine_speed(machine, level, base_speed, speed_m
 	end
 end
 
+function factory_levels.update_crafting_categories(machine, _, crafting_categories)
+	machine.crafting_categories = crafting_categories
+end
+
 function factory_levels.update_machine_energy_usage(machine, level, base_usage, usage_multiplier, energy_unit)
 	if (settings.startup["factory-levels-enable-energy-usage"].value) then
 		machine.energy_usage = (base_usage + usage_multiplier * level) .. energy_unit
@@ -130,6 +134,10 @@ function factory_levels.create_leveled_machines(machines)
 			factory_levels.update_machine_productivity(machine, level, machines.base_productivity[tier], machines.productivity_multipliers[tier])
 			factory_levels.update_machine_module_slots(machine, level, machines.levels_per_module_slots[tier], machines.base_module_slots[tier], machines.bonus_module_slots[tier])
 			factory_levels.update_machine_tint(machine, level, machines.base_level_tints[tier], machines.level_tint_multipliers[tier])
+
+			if mods["space-age"] and machines.crafting_categories ~= nil then
+				factory_levels.update_crafting_categories(machine, level, machines.crafting_categories[tier])
+			end
 		end
 	end
 end

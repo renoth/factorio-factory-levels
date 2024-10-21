@@ -24,7 +24,11 @@ assembling_machine_levels = {
 	productivity_multipliers = { 0.0025, 0.0025, 0.0025 },
 	levels_per_module_slots = { 20, 20, 25 },
 	base_module_slots = { 0, 2, 4 },
-	bonus_module_slots = { 1, 1, 1 }
+	bonus_module_slots = { 1, 1, 1 },
+	crafting_categories = { { "crafting", "basic-crafting", "advanced-crafting", "electronics", "pressing" },
+							{ "basic-crafting", "crafting", "advanced-crafting", "crafting-with-fluid", "electronics", "electronics-with-fluid", "pressing", "metallurgy-or-assembling", "organic-or-hand-crafting", "organic-or-assembling", "electronics-or-assembling", "cryogenics-or-assembling", "crafting-with-fluid-or-metallurgy" },
+							{ "basic-crafting", "crafting", "advanced-crafting", "crafting-with-fluid", "electronics", "electronics-with-fluid", "pressing", "metallurgy-or-assembling", "organic-or-hand-crafting", "organic-or-assembling", "electronics-or-assembling", "cryogenics-or-assembling", "crafting-with-fluid-or-metallurgy" } }
+
 }
 
 factory_levels.create_leveled_machines(assembling_machine_levels)
@@ -69,7 +73,8 @@ chemical_plant_levels = {
 	productivity_multipliers = { 0.001 },
 	levels_per_module_slots = { 25 },
 	base_module_slots = { 3 },
-	bonus_module_slots = { 1 }
+	bonus_module_slots = { 1 },
+	crafting_categories = { { "chemistry", "chemistry-or-cryogenics", "organic-or-chemistry" } }
 }
 if mods["space-exploration"] then
 	table.insert(data.raw["assembling-machine"]["chemical-plant"].crafting_categories, "melting")
