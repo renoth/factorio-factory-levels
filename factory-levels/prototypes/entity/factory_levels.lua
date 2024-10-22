@@ -32,7 +32,7 @@ function factory_levels.update_machine_module_slots(machine, level, levels_per_m
 	if (settings.startup["factory-levels-enable-module-bonus"].value) then
 		machine.module_specification = { module_slots = base_module_slots + (math.floor(level / levels_per_module_slot) * module_slot_bonus) }
 		if machine.module_specification.module_slots > 0 then
-			machine.allowed_effects = { "consumption", "speed", "productivity", "pollution" }
+			machine.allowed_effects = { "consumption", "speed", "productivity", "pollution", "quality" }
 		end
 	end
 end
