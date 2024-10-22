@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.7.2
+Date: 2024-10-22
+  Changes:
+    - Fix missing productivity bonus on leveled entities
+    - Disable modules request workaround for now because of crash
+---------------------------------------------------------------------------------------------------
 Version: 0.7.1
 Date: 2024-10-21
   Changes:

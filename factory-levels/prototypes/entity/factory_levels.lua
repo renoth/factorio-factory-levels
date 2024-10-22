@@ -24,7 +24,7 @@ end
 
 function factory_levels.update_machine_productivity(machine, level, base_productivity, productivity_multiplier)
 	if (settings.startup["factory-levels-enable-productivity-bonus"].value) then
-		machine.base_productivity = base_productivity + productivity_multiplier * level
+		machine.effect_receiver = { base_effect = { productivity = base_productivity + productivity_multiplier * level } }
 	end
 end
 

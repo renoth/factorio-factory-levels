@@ -395,13 +395,14 @@ function upgrade_factory(surface, targetname, sourceentity)
 											force = sourceentity.force }
 
 	storage.built_machines[created.unit_number] = { entity = created, unit_number = created.unit_number }
-	if item_requests then
-		surface.create_entity({ name = "item-request-proxy",
-								position = created.position,
-								force = created.force,
-								target = created,
-								modules = item_requests })
-	end
+	-- #51 disable module requests for now
+	--if item_requests then
+	--	surface.create_entity({ name = "item-request-proxy",
+	--							position = created.position,
+	--							force = created.force,
+	--							target = created,
+	--							item-request-proxy = item_requests })
+	--end
 
 	sourceentity.destroy()
 
