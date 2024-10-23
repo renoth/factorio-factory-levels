@@ -122,6 +122,7 @@ function factory_levels.create_leveled_machines(machines)
 			local machine = factory_levels.get_or_create_machine(machines.type, machines.base_machine_names[tier], level)
 
 			if level > 0 then
+				machine.hidden = true
 				machine.minable.result = machines.base_machine_names[tier]
 				machine.placeable_by = { item = machines.base_machine_names[tier], count = 1 }
 				machine.localised_name = { "entity-name.factory-levels", { "entity-name." .. machines.base_machine_names[tier] }, level .. "" }
