@@ -339,15 +339,6 @@ function get_inventory_contents(inventory)
 	return inventory_results
 end
 
-function insert_inventory_contents(inventory, contents)
-	if inventory == nil or not inventory.is_empty() then
-		return
-	end
-	for _, item in pairs(contents) do
-		inventory.insert(item)
-	end
-end
-
 function upgrade_factory(surface, targetname, sourceentity)
 	local finished_products_count = sourceentity.products_finished
 	local box = sourceentity.bounding_box
@@ -410,16 +401,6 @@ function upgrade_factory(surface, targetname, sourceentity)
 	if created.type == "assembling-machine" and recipe ~= nil then
 		created.set_recipe(recipe)
 	end
-
-	if created.type == "assembling-machine" then
-		insert_inventory_contents(created.get_inventory(defines.inventory.assembling_machine_input), input_inventory)
-	elseif created.type == "furnace" then
-		insert_inventory_contents(created.get_inventory(defines.inventory.furnace_source), input_inventory)
-	end
-	insert_inventory_contents(created.get_output_inventory(), output_inventory)
-	insert_inventory_contents(created.get_module_inventory(), module_inventory)
-	insert_inventory_contents(created.get_fuel_inventory(), fuel_inventory)
-	insert_inventory_contents(created.get_burnt_result_inventory(), burnt_result_inventory)
 
 	local old_on_ground = surface.find_entities_filtered { area = box, name = 'item-on-ground' }
 	for _, item in pairs(old_on_ground) do
