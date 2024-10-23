@@ -344,6 +344,7 @@ function upgrade_factory(surface, targetname, sourceentity)
 	local box = sourceentity.bounding_box
 	local item_requests = nil
 	local recipe = nil
+	local recipe_quality = nil
 
 	local existing_requests = surface.find_entity("item-request-proxy", sourceentity.position)
 	if existing_requests then
@@ -372,12 +373,13 @@ function upgrade_factory(surface, targetname, sourceentity)
 	storage.built_machines[sourceentity.unit_number] = nil
 	if sourceentity.type == "assembling-machine" then
 		-- Recipe should survive, but why take that chance.
-		recipe = sourceentity.get_recipe()
+		recipe, recipe_quality = sourceentity.get_recipe()
 	end
 
 	local created = surface.create_entity { name = targetname,
 											source = sourceentity,
 											direction = sourceentity.direction,
+											quality = sourceentity.quality,
 											raise_built = true,
 											fast_replace = true,
 											spill = false,
@@ -399,7 +401,7 @@ function upgrade_factory(surface, targetname, sourceentity)
 
 	created.products_finished = finished_products_count;
 	if created.type == "assembling-machine" and recipe ~= nil then
-		created.set_recipe(recipe)
+		created.set_recipe(recipe, recipe_quality)
 	end
 
 	local old_on_ground = surface.find_entities_filtered { area = box, name = 'item-on-ground' }
