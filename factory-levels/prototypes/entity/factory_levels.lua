@@ -40,8 +40,9 @@ end
 
 function factory_levels.update_machine_module_slots(machine, level, levels_per_module_slot, base_module_slots, module_slot_bonus)
 	if (settings.startup["factory-levels-enable-module-bonus"].value) then
-		machine.module_specification = { module_slots = base_module_slots + (math.floor(level / levels_per_module_slot) * module_slot_bonus) }
-		if machine.module_specification.module_slots > 0 then
+		machine.module_slots = base_module_slots + (math.floor(level / levels_per_module_slot) * module_slot_bonus)
+
+		if machine.module_slots > 0 then
 			machine.allowed_effects = { "consumption", "speed", "productivity", "pollution", "quality" }
 		end
 	end
@@ -133,7 +134,6 @@ function factory_levels.create_leveled_machines(machines)
 			local machine = factory_levels.get_or_create_machine(machines.type, machines.base_machine_names[tier], level)
 
 			if level > 0 then
-				machine.hidden = true
 				machine.minable.result = machines.base_machine_names[tier]
 				machine.placeable_by = { item = machines.base_machine_names[tier], count = 1 }
 				machine.localised_name = { "entity-name.factory-levels", { "entity-name." .. machines.base_machine_names[tier] }, level .. "" }
