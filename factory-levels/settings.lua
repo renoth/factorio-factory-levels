@@ -48,5 +48,12 @@ data:extend({
 		order = "f",
 		setting_type = "runtime-global",
 		default_value = false
-	}
+    },
+    {
+        type = "bool-setting",
+        name = "factory-levels-enable-quality-bonus",
+        order = "g",
+        setting_type = "startup",
+        default_value = true
+    }
 })

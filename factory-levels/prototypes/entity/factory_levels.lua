@@ -22,9 +22,19 @@ function factory_levels.update_machine_pollution(machine, level, base_emission, 
 	end
 end
 
-function factory_levels.update_machine_productivity(machine, level, base_productivity, productivity_multiplier)
-	if (settings.startup["factory-levels-enable-productivity-bonus"].value) then
+function factory_levels.update_machine_productivity_quality(machine, level, base_productivity, productivity_multiplier, quality_multiplier)
+	if (settings.startup["factory-levels-enable-productivity-bonus"].value) and not (settings.startup["factory-levels-enable-quality-bonus"].value) then
 		machine.effect_receiver = { base_effect = { productivity = base_productivity + productivity_multiplier * level } }
+	elseif (settings.startup["factory-levels-enable-productivity-bonus"].value) and (settings.startup["factory-levels-enable-quality-bonus"].value) then
+		machine.effect_receiver = { base_effect = { productivity = base_productivity + productivity_multiplier * level, quality = quality_multiplier * level } }
+	elseif not (settings.startup["factory-levels-enable-productivity-bonus"].value) and (settings.startup["factory-levels-enable-quality-bonus"].value) then
+		machine.effect_receiver = { base_effect = { quality = quality_multiplier * level } }
+	end
+end
+
+function factory_levels.update_machine_quality(machine, level, quality_multiplier)
+	if (settings.startup["factory-levels-enable-quality-bonus"].value) then
+		machine.effect_receiver.base_effect.quality = 1
 	end
 end
 
@@ -118,6 +128,7 @@ end
 
 function factory_levels.create_leveled_machines(machines)
 	for tier = 1, machines.tiers, 1 do
+		log("Creating leveled machines " .. machines.base_machine_names[tier])
 		for level = 0, machines.levels[tier], 1 do
 			local machine = factory_levels.get_or_create_machine(machines.type, machines.base_machine_names[tier], level)
 
@@ -132,7 +143,7 @@ function factory_levels.create_leveled_machines(machines)
 			factory_levels.update_machine_speed(machine, level, machines.base_speeds[tier], machines.speed_multipliers[tier])
 			factory_levels.update_machine_energy_usage(machine, level, machines.base_consumption[tier], machines.consumption_multipliers[tier], machines.consumption_unit[tier])
 			factory_levels.update_machine_pollution(machine, level, machines.base_pollution[tier], machines.pollution_multipliers[tier])
-			factory_levels.update_machine_productivity(machine, level, machines.base_productivity[tier], machines.productivity_multipliers[tier])
+			factory_levels.update_machine_productivity_quality(machine, level, machines.base_productivity[tier], machines.productivity_multipliers[tier], machines.quality_multipliers[tier])
 			factory_levels.update_machine_module_slots(machine, level, machines.levels_per_module_slots[tier], machines.base_module_slots[tier], machines.bonus_module_slots[tier])
 			factory_levels.update_machine_tint(machine, level, machines.base_level_tints[tier], machines.level_tint_multipliers[tier])
 
@@ -174,7 +185,7 @@ function factory_levels.fix_productivity(machines)
 		for level = 0, machines.levels[tier], 1 do
 			local machine = factory_levels.get_or_create_machine(machines.type, machines.base_machine_names[tier], level)
 			if machine.base_productivity == 0 or machine.base_productivity == nil then
-				factory_levels.update_machine_productivity(machine, level, machines.base_productivity[tier], machines.productivity_multipliers[tier])
+				factory_levels.update_machine_productivity_quality(machine, level, machines.base_productivity[tier], machines.productivity_multipliers[tier], machines.quality_multipliers[tier])
 			end
 		end
 	end
