@@ -6,7 +6,7 @@
 
     <groupId>de.renoth</groupId>
     <artifactId>factory-levels</artifactId>
-    <version>0.7.8</version>
+    <version>0.7.9</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
