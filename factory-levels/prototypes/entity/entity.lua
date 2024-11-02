@@ -167,6 +167,34 @@ end
 factory_levels.create_leveled_machines(burner_furnace_levels)
 factory_levels.create_leveled_machines(electric_furnace_levels)
 
+-- Recycler (from quality mod)
+
+if mods["quality"] and settings.startup["factory-levels-enable-recycler-leveling"].value then
+	recycler_furnace_levels = {
+		type = "furnace",
+		tiers = 1,
+		base_machine_names = { "recycler" },
+		base_level_tints = { { r = 1, g = 1, b = 1 } },
+		level_tint_multipliers = { { r = 0, g = -0.008, b = -0.008 } },
+		levels = { 100 },
+		base_speeds = { 0.5 },
+		speed_multipliers = { 0.01 },
+		base_consumption = { 180 },
+		consumption_multipliers = { 3 },
+		consumption_unit = { "kW" },
+		base_pollution = { 2 },
+		pollution_multipliers = { 0.1 },
+		base_productivity = { 0 },
+		productivity_multipliers = { 0.002 },
+		quality_multipliers = { 0.005 },
+		levels_per_module_slots = { 33 },
+		base_module_slots = { 4 },
+		bonus_module_slots = { 1 }
+	}
+
+	factory_levels.create_leveled_machines(recycler_furnace_levels)
+end
+
 if mods["Electric Furnaces"] then
 	electric_burner_furnace_levels = {
 		type = "furnace",

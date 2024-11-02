@@ -76,6 +76,14 @@ machines = {
 		max_level = 100
 	},
 
+	-- Recyclers
+
+	["recycler"] = {
+		name = "recycler",
+		level_name = "recycler-level-",
+		max_level = 100
+	},
+
 	-- Electric Furnaces
 
 	["electric-stone-furnace"] = {
@@ -315,14 +323,17 @@ function determine_machine(entity)
 	if settings.global["factory-levels-disable-mod"].value then
 		return nil
 	end
+
 	if entity == nil or not entity.valid or (entity.type ~= "assembling-machine" and entity.type ~= "furnace") then
 		return nil
 	end
+
 	for _, machine in pairs(machines) do
 		if entity.name == machine.name or string_starts_with(entity.name, machine.level_name) then
 			return machine
 		end
 	end
+
 	return nil
 end
 
@@ -371,6 +382,7 @@ function upgrade_factory(surface, targetname, sourceentity)
 	local burnt_result_inventory = get_inventory_contents(sourceentity.get_burnt_result_inventory())
 
 	storage.built_machines[sourceentity.unit_number] = nil
+
 	if sourceentity.type == "assembling-machine" then
 		-- Recipe should survive, but why take that chance.
 		recipe, recipe_quality = sourceentity.get_recipe()
@@ -501,6 +513,7 @@ script.on_event(
 function replace_built_entity(entity, finished_product_count)
 	storage.built_machines[entity.unit_number] = { entity = entity, unit_number = entity.unit_number }
 	local machine = determine_machine(entity)
+
 	if finished_product_count ~= nil then
 		local should_have_level = determine_level(finished_product_count)
 		entity.products_finished = finished_product_count

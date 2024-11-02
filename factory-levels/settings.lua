@@ -55,5 +55,12 @@ data:extend({
         order = "g",
         setting_type = "startup",
         default_value = true
+    },
+    {
+        type = "bool-setting",
+        name = "factory-levels-enable-recycler-leveling",
+        order = "g",
+        setting_type = "startup",
+        default_value = false
     }
 })
