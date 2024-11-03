@@ -76,14 +76,6 @@ machines = {
 		max_level = 100
 	},
 
-	-- Recyclers
-
-	["recycler"] = {
-		name = "recycler",
-		level_name = "recycler-level-",
-		max_level = 100
-	},
-
 	-- Electric Furnaces
 
 	["electric-stone-furnace"] = {
@@ -237,6 +229,14 @@ machines = {
 		max_level = 100
 	}
 }
+
+if settings.startup["factory-levels-enable-recycler-leveling"].value then
+	machines["recycler"] = {
+		name = "recycler",
+		level_name = "recycler-level-",
+		max_level = 100
+	}
+end
 
 exponent = settings.global["factory-levels-exponent"].value
 max_level = 1
