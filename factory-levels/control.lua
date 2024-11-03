@@ -369,18 +369,6 @@ function upgrade_factory(surface, targetname, sourceentity)
 		end
 	end
 
-	-- For unknown reasons, Factorio is voiding ALL of the inventories of the machine.
-	local input_inventory = {}
-	if sourceentity.type == "assembling-machine" then
-		input_inventory = get_inventory_contents(sourceentity.get_inventory(defines.inventory.assembling_machine_input))
-	elseif sourceentity.type == "furnace" then
-		input_inventory = get_inventory_contents(sourceentity.get_inventory(defines.inventory.furnace_source))
-	end
-	local output_inventory = get_inventory_contents(sourceentity.get_output_inventory())
-	local module_inventory = get_inventory_contents(sourceentity.get_module_inventory())
-	local fuel_inventory = get_inventory_contents(sourceentity.get_fuel_inventory())
-	local burnt_result_inventory = get_inventory_contents(sourceentity.get_burnt_result_inventory())
-
 	storage.built_machines[sourceentity.unit_number] = nil
 
 	if sourceentity.type == "assembling-machine" then
