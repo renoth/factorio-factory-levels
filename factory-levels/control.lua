@@ -57,6 +57,11 @@ machines = {
 		level_name = "assembling-machine-3-level-",
 		max_level = 100
 	},
+	["electromagnetic-plant"] = {
+		name = "electromagnetic-plant",
+		level_name = "electromagnetic-plant-level-",
+		max_level = 100
+	},
 
 	-- Smelters
 	["stone-furnace"] = {
