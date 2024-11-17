@@ -361,6 +361,7 @@ function upgrade_factory(surface, targetname, sourceentity)
 	local item_requests = nil
 	local recipe = nil
 	local recipe_quality = nil
+	local mirroring = sourceentity.mirroring
 
 	local existing_requests = surface.find_entity("item-request-proxy", sourceentity.position)
 	if existing_requests then
@@ -391,6 +392,7 @@ function upgrade_factory(surface, targetname, sourceentity)
 											create_build_effect_smoke = false,
 											position = sourceentity.position,
 											force = sourceentity.force }
+	created.mirroring = mirroring
 
 	storage.built_machines[created.unit_number] = { entity = created, unit_number = created.unit_number }
 	-- #51 disable module requests for now
