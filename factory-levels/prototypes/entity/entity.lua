@@ -197,7 +197,6 @@ end
 
 -- Electromagnetic Plant from space-age mod
 
-
 if mods["space-age"] then
 	electromagnetic_plant_levels = {
 		type = "assembling-machine",
@@ -222,6 +221,30 @@ if mods["space-age"] then
 	}
 
 	factory_levels.create_leveled_machines(electromagnetic_plant_levels)
+
+	biochamber_levels = {
+		type = "assembling-machine",
+		tiers = 1,
+		base_machine_names = { "biochamber" },
+		base_level_tints = { { r = 1, g = 1, b = 1 } },
+		level_tint_multipliers = { { r = 0, g = -0.008, b = -0.008 } },
+		levels = { 100 },
+		base_speeds = { 2 },
+		speed_multipliers = { 0.02 },
+		base_consumption = { 500 },
+		consumption_multipliers = { 5 },
+		consumption_unit = { "kW" },
+		base_pollution = { -1 },
+		pollution_multipliers = { 0 },
+		base_productivity = { 0.5 },
+		productivity_multipliers = { 0.005 },
+		quality_multipliers = { 0.005 },
+		levels_per_module_slots = { 33 },
+		base_module_slots = { 4 },
+		bonus_module_slots = { 1 }
+	}
+
+	factory_levels.create_leveled_machines(biochamber_levels)
 end
 
 if mods["Electric Furnaces"] then

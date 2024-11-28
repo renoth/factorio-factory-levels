@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.7.16
+Date: 2024-11-28
+  New features:
+    - Biochamber leveling
+  Changes:
+    - Adjust deletion of item-on-ground when replacing entities due to biochamber bounding box
+---------------------------------------------------------------------------------------------------
 Version: 0.7.15
 Date: 2024-11-03
   Bugfix:

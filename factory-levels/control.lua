@@ -62,6 +62,11 @@ machines = {
 		level_name = "electromagnetic-plant-level-",
 		max_level = 100
 	},
+	["biochamber"] = {
+		name = "biochamber",
+		level_name = "biochamber-level-",
+		max_level = 100
+	},
 
 	-- Smelters
 	["stone-furnace"] = {
@@ -377,11 +382,6 @@ function upgrade_factory(surface, targetname, sourceentity)
 
 	storage.built_machines[sourceentity.unit_number] = nil
 
-	if sourceentity.type == "assembling-machine" then
-		-- Recipe should survive, but why take that chance.
-		recipe, recipe_quality = sourceentity.get_recipe()
-	end
-
 	local created = surface.create_entity { name = targetname,
 											source = sourceentity,
 											direction = sourceentity.direction,
@@ -407,11 +407,15 @@ function upgrade_factory(surface, targetname, sourceentity)
 	sourceentity.destroy()
 
 	created.products_finished = finished_products_count;
-	if created.type == "assembling-machine" and recipe ~= nil then
-		created.set_recipe(recipe, recipe_quality)
-	end
 
-	local old_on_ground = surface.find_entities_filtered { area = box, name = 'item-on-ground' }
+	local old_on_ground = surface.find_entities_filtered {
+		area = {
+			left_top = { x = box.left_top.x - 0.3, y = box.left_top.y - 0.3 },
+			right_bottom = { x = box.right_bottom.x + 0.3, y = box.right_bottom.y + 0.3 }
+		},
+		name = 'item-on-ground'
+	}
+
 	for _, item in pairs(old_on_ground) do
 		item.destroy()
 	end
