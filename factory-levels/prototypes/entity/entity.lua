@@ -107,6 +107,10 @@ centrifuge_levels = {
 }
 factory_levels.create_leveled_machines(centrifuge_levels)
 
+if mods["gleba-reborn"] then
+	table.insert(data.raw["assembling-machine"]["centrifuge"].crafting_categories, "organic-or-centrifuging")
+end
+
 -- Furnaces
 burner_furnace_levels = {
 	type = "furnace",

@@ -16,6 +16,7 @@ if mods["omnimatter"] then
 		levels = { 10, 25 },
 		base_speeds = { 1, 2 },
 		speed_multipliers = { 0.04, 0.04 },
+		quality_multipliers = { 0.04, 0.04 },
 		base_consumption = { 75, 100 },
 		consumption_multipliers = { 1, 2 },
 		consumption_unit = { "kW", "kW" },
