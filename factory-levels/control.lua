@@ -237,6 +237,53 @@ machines = {
 		name = "algae-farm-4",
 		level_name = "algae-farm-4-level-",
 		max_level = 100
+	},
+
+	-- ev-refining
+	["crusher1"] = {
+		name = "crusher1",
+		level_name = "crusher1-level-",
+		max_level = 25,
+		next_machine = "crusher2"
+	},
+	["crusher2"] = {
+		name = "crusher2",
+		level_name = "crusher2-level-",
+		max_level = 50,
+		next_machine = "crusher3"
+	},
+	["crusher3"] = {
+		name = "crusher3",
+		level_name = "crusher3-level-",
+		max_level = 100
+	},
+	["echamber1"] = {
+		name = "echamber1",
+		level_name = "echamber1-level-",
+		max_level = 25,
+		next_machine = "echamber2"
+	},
+	["echamber2"] = {
+		name = "echamber2",
+		level_name = "echamber2-level-",
+		max_level = 50,
+		next_machine = "echamber3"
+	},
+	["echamber3"] = {
+		name = "echamber3",
+		level_name = "echamber3-level-",
+		max_level = 100
+	},
+	["pchamber1"] = {
+		name = "pchamber1",
+		level_name = "pchamber1-level-",
+		max_level = 50,
+		next_machine = "pchamber2"
+	},
+	["pchamber2"] = {
+		name = "pchamber2",
+		level_name = "pchamber2-level-",
+		max_level = 100
 	}
 }
 

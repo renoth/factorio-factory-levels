@@ -32,6 +32,100 @@ if mods["omnimatter"] then
 	factory_levels.create_leveled_machines(omnimatter_crusher_levels)
 end
 
+if mods["ev-refining"] then
+	ev_refining_crusher_levels = {
+		type = "assembling-machine",
+		tiers = 3,
+		base_machine_names = { "crusher1", "crusher2", "crusher3" },
+		base_level_tints = {
+			{ r = 1, g = 1, b = 1 },
+			{ r = 1, g = 1, b = 1 },
+			{ r = 1, g = 1, b = 1 }
+		},
+		level_tint_multipliers = {
+			{ r = 0, g = -0.02, b = -0.02 },
+			{ r = 0, g = -0.01, b = -0.01 },
+			{ r = 0, g = -0.005, b = -0.005 }
+		},
+		levels = { 25, 50, 100 },
+		base_speeds = { 1, 2, 3 },
+		speed_multipliers = { 0.04, 0.02, 0.03 },
+		base_consumption = { 103, 207, 517 },
+		consumption_multipliers = { 4.16, 6.2, 5.17 },
+		consumption_unit = { "kW", "kW", "kW" },
+		base_pollution = { 4, 3, 2 },
+		pollution_multipliers = { 0.04, 0.03, 0.2 },
+		base_productivity = { 0, 0, 0 },
+		productivity_multipliers = { 0.0025, 0.0025, 0.0025 },
+		quality_multipliers = { 0.002, 0.002, 0.002 },
+		levels_per_module_slots = { 20, 20, 25 },
+		base_module_slots = { 1, 2, 4 },
+		bonus_module_slots = { 1, 1, 1 }
+	}
+
+	ev_refining_echamber_levels = {
+		type = "assembling-machine",
+		tiers = 3,
+		base_machine_names = { "echamber1", "echamber2", "echamber3" },
+		base_level_tints = {
+			{ r = 1, g = 1, b = 1 },
+			{ r = 1, g = 1, b = 1 },
+			{ r = 1, g = 1, b = 1 }
+		},
+		level_tint_multipliers = {
+			{ r = 0, g = -0.02, b = -0.02 },
+			{ r = 0, g = -0.01, b = -0.01 },
+			{ r = 0, g = -0.005, b = -0.005 }
+		},
+		levels = { 25, 50, 100 },
+		base_speeds = { 1, 2, 3 },
+		speed_multipliers = { 0.04, 0.02, 0.03 },
+		base_consumption = { 336, 413, 1030 },
+		consumption_multipliers = { 3.08, 12.34, 10.3 },
+		consumption_unit = { "kW", "kW", "kW" },
+		base_pollution = { 3, 2, 1 },
+		pollution_multipliers = { 0.04, 0.03, 0.2 },
+		base_productivity = { 0, 0, 0 },
+		productivity_multipliers = { 0.0025, 0.0025, 0.0025 },
+		quality_multipliers = { 0.002, 0.002, 0.002 },
+		levels_per_module_slots = { 20, 20, 25 },
+		base_module_slots = { 2, 2, 4 },
+		bonus_module_slots = { 1, 1, 1 }
+	}
+
+	ev_refining_pchamber_levels = {
+		type = "assembling-machine",
+		tiers = 2,
+		base_machine_names = { "pchamber1", "pchamber2" },
+		base_level_tints = {
+			{ r = 1, g = 1, b = 1 },
+			{ r = 1, g = 1, b = 1 }
+		},
+		level_tint_multipliers = {
+			{ r = 0, g = -0.01, b = -0.01 },
+			{ r = 0, g = -0.005, b = -0.005 }
+		},
+		levels = { 50, 100 },
+		base_speeds = { 1, 2 },
+		speed_multipliers = { 0.02, 0.02 },
+		base_consumption = { 775, 2070 },
+		consumption_multipliers = { 25.9, 20.7 },
+		consumption_unit = { "kW", "kW", "kW" },
+		base_pollution = { 4, 2 },
+		pollution_multipliers = { 0.04, 0.02 },
+		base_productivity = { 0, 0 },
+		productivity_multipliers = { 0.0025, 0.0025 },
+		quality_multipliers = { 0.002, 0.002, 0.002 },
+		levels_per_module_slots = { 20, 25 },
+		base_module_slots = { 2, 4 },
+		bonus_module_slots = { 1, 1 }
+	}
+
+	factory_levels.create_leveled_machines(ev_refining_crusher_levels)
+	factory_levels.create_leveled_machines(ev_refining_echamber_levels)
+	factory_levels.create_leveled_machines(ev_refining_pchamber_levels)
+end
+
 factory_levels.fix_productivity(assembling_machine_levels)
 factory_levels.fix_productivity(oil_refinery_levels)
 factory_levels.fix_productivity(chemical_plant_levels)

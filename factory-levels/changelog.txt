@@ -3,6 +3,7 @@ Version: 0.7.18
 Date: 2025-03-22
   New Features:
     - Add Gleba Reborn Support
+    - Add Extended Vanilla Refining Support
 ---------------------------------------------------------------------------------------------------
 Version: 0.7.17
 Date: 2025-03-22
